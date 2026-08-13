@@ -2,17 +2,20 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 :root {
     --white: rgb(220, 220, 220);
     --whiteMedium: rgb(180, 180, 180);
+    --black: rgb(30, 30, 30);
+    --enphasis: rgb(235, 57, 57);
 }
 
 body {
     width: 100vw;
     height: 100vh;
-    background-color: rgb(30, 30, 30);
+    background-color: var(--black);
     padding: 20px;
 
     .mainContainer {
@@ -42,8 +45,6 @@ body {
                     font-Size: 80px;
                     font-weight: bolder;
                     color: var(--whiteMedium);
-                    /*                     border: 1px solid grey;
- */
                 }
 
                 &:nth-child(1 of &) {
@@ -68,6 +69,7 @@ body {
             border: 6px solid var(--white);
 
             .gameLineSeparator {
+                z-index: -1;
                 left: calc(50% - 2px);
                 width: 4px;
                 height: 100%;
@@ -95,9 +97,37 @@ body {
                 border-radius: 50%;
                 background-color: var(--white);
             }
+
+            .selectionBox {
+                display: flex;
+                justify-content: space-between;
+                width: 600px;
+                height: 100px;
+
+                .sideBox {
+                    width: 200px;
+                    height: 100%;
+                    font-family: "Orbitron";
+                    font-weight: bolder;
+                    font-size: 24px;
+                    letter-spacing: 4px;
+                    color: gray;
+                    border: 3px solid rgba(255, 255, 255, 0.075);
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: 100ms;
+
+                    &:hover {
+                        color: white;
+                        border: 3px solid white;
+                        box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
+                    }
+                }
+            }
         }
     }
 }
+
 
 .max {
     width: 100%;
@@ -110,4 +140,22 @@ body {
 
 .relative {
     position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

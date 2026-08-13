@@ -10,9 +10,7 @@
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -26,13 +24,20 @@
                 <div class="counter">20</div>
             </div>
         </div>
-        <div class="gameBox relative">
+        <div id="gameBox" class="gameBox relative centered">
             <div class="gameLineSeparator absolute"></div>
-            <div class="bar leftBar absolute"></div>
-            <div class="bar rightBar absolute"></div>
-            <div class="ball absolute"></div>
+            <div id="barLeft" class="bar leftBar absolute hidden invisible"></div>
+            <div id="barRight" class="bar rightBar absolute hidden invisible"></div>
+            <div id="ball" class="ball absolute hidden invisible"></div>
+
+            <div class="selectionBox">
+                <div class="sideBox centered">LEFT</div>
+                <div class="sideBox centered">RIGHT</div>
+            </div>
         </div>
     </div>
+
+    <script type="module" src="control.js"></script>
 </body>
 
 </html>

@@ -2,10 +2,13 @@ const gameBox = document.querySelector("#gameBox")
 const ball = document.querySelector("#ball")
 const barLeft = document.querySelector("#barLeft")
 const barRight = document.querySelector("#barRight")
+const pressSpace = document.querySelector(".pressSpace")
 
-let tempo = 200
+const ballSize = parseFloat(getComputedStyle(ball).getPropertyValue("width"))
+const steps = 8
+const tempo = 200
+
 let gameBoxSize = null
-let ballSize = parseFloat(getComputedStyle(ball).getPropertyValue("width"))
 let sideLeft = null
 let bar = null
 let barPos = null /* vertical center */
@@ -39,7 +42,7 @@ const prepareSide = async () => {
     await hideSideSelectors()
     await gameElementsVisibility()
     const pressSpace = activeSpace()
-    await pressSpaceVisivility(pressSpace)
+    await loadSpaceBox()
 }
 
 const setBallToLeft = () => {
@@ -66,17 +69,32 @@ const hideSideSelectors = async () => {
     await sleep(boxTempo)
 }
 
-const pressSpaceVisivility = async (pressSpace) => {
+
+const unloadSpaceBox = async () => {
     const pressTempo = parseFloat(getComputedStyle(pressSpace).getPropertyValue("transition")) * 1000
-    pressSpace.classList.replace("invisible", "visible")
-    await sleep(pressTempo * 4)
+    pressSpace.querySelector(".spaceText").classList.add("invisible")
+    await sleep(pressTempo)
+    pressSpace.classList.remove("pressSpace_expanded")
+    pressSpace.classList.add("invisible")
+    await sleep(pressTempo)
+    pressSpace.classList.add("hidden")
+}
+
+const loadSpaceBox = async () => {
+    const pressTempo = parseFloat(getComputedStyle(pressSpace).getPropertyValue("transition")) * 1000
+    pressSpace.classList.remove("hidden")
+    await sleep(50)
+    pressSpace.classList.add("pressSpace_expanded")
+    pressSpace.classList.remove("invisible")
+    await sleep(pressTempo * 2)
+    pressSpace.querySelector(".spaceText").classList.remove("invisible")
     pressSpace.classList.add("pressSpace_pulse")
 }
 
 const activeSpace = () => {
-    const pressSpace = document.querySelector(".pressSpace")
-    document.addEventListener("keypress", (e) => {
+    document.addEventListener("keypress", async (e) => {
         if (e.code === "Space") {
+            unloadSpaceBox()
         }
     })
     return pressSpace
@@ -96,7 +114,6 @@ const activeBar = () => {
 
 const moveBar = (dir) => {
     let bar = sideLeft ? barLeft : barRight
-    const steps = 8
     barPos === null && (barPos = steps / 2)
     const moveStep = (gameBox.clientHeight - bar.offsetHeight) / steps
     if (dir === "up" && barPos > 0) barPos--

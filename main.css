@@ -10,6 +10,7 @@
     --whiteMedium: rgb(180, 180, 180);
     --black: rgb(30, 30, 30);
     --enphasis: rgb(235, 57, 57);
+    --barEnphasis: aquamarine;
 }
 
 body {
@@ -63,87 +64,114 @@ body {
             }
         }
 
-        .gameBox {
+        .gameContainer {
             width: 100%;
             height: calc(100% - 100px);
-            border: 5px solid var(--white);
+            padding: 20px;
+            border: 4px solid var(--white);
+            border-radius: 20px;
 
-            .gameLineSeparator {
-                z-index: -1;
-                left: calc(50% - 2px);
-                width: 4px;
-                height: 100%;
-                background-color: rgba(128, 128, 128, 0.2);
-            }
+            .gameBox {
+                border: 2px solid gray;
+                border-radius: 16px;
+                background-image: radial-gradient(circle, rgba(105, 105, 105, 0.253) 1px, transparent 1px);
+                background-size: 4px 4px;
+                box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
 
-            .bar {
-                top: calc(50% - 50px);
-                width: 20px;
-                height: 100px;
-                background-color: var(--white);
-            }
-
-            .leftBar {
-                left: 20px;
-            }
-
-            .rightBar {
-                right: 20px
-            }
-
-            .ball {
-                width: 24px;
-                aspect-ratio: 1/1;
-                background-color: white;
-                box-shadow: 0 0 30px white;
-                border-radius: 50%;
-            }
-
-            .sideSelectorsBox {
-                display: flex;
-                justify-content: space-between;
-                width: 600px;
-                height: 100px;
-
-                .sideBox {
-                    z-index: 99;
-                    width: 200px;
+                .gameLineSeparator {
+                    z-index: -1;
+                    left: calc(50% - 2px);
+                    width: 4px;
                     height: 100%;
-                    cursor: pointer;
-                    transition: 100ms;
+                    background-color: rgba(128, 128, 128, 0.2);
+                }
 
-                    &:hover {
-                        color: white;
-                        border: 3px solid white;
-                        box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
-                    }
+                .bar {
+                    top: calc(50% - 50px);
+                    width: 20px;
+                    height: 100px;
+                    border: 2px solid white;
+                    border-radius: 4px;
+                    background-color: rgba(255, 255, 255, 0.6);
+                }
 
-                    &:has(.hiddenSelector:checked) {
-                        color: white;
-                        border: 3px solid white;
-                        box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
+                .barReady {
+                    animation: barReady 5s linear infinite;
+                }
+
+                .leftBar {
+                    left: 20px;
+                }
+
+                .rightBar {
+                    right: 20px
+                }
+
+                .ball {
+                    width: 24px;
+                    aspect-ratio: 1/1;
+                    background-color: white;
+                    box-shadow: 0 0 30px white;
+                    border-radius: 50%;
+                }
+
+                .sideSelectorsBox {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 600px;
+                    height: 100px;
+
+                    .sideBox {
+                        z-index: 99;
+                        width: 200px;
+                        height: 100%;
+                        background-color: var(--black);
+                        cursor: pointer;
+                        transition: 100ms;
+
+                        &:hover {
+                            color: white;
+                            border: 3px solid white;
+                            box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
+                        }
+
+                        &:has(.hiddenSelector:checked) {
+                            color: white;
+                            border: 3px solid white;
+                            box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
+                        }
                     }
                 }
-            }
 
-            .sideSelectorsBox_expanded {
-                width: 900px;
-            }
+                .sideSelectorsBox_expanded {
+                    width: 900px;
+                }
 
-            .pressSpace {
-                width: 400px;
-                height: 60px;
-                background-color: var(--black);
-            }
+                .pressSpace {
+                    width: 0;
+                    height: 60px;
+                    background-color: var(--black);
+                    overflow: hidden ;
 
-            .pressSpace_pulse {
-                animation: pulseColor 5s linear infinite;
+                    .spaceText {
+                        display: flex;
+                    }
+                }
+
+                .pressSpace_expanded {
+                    width: 400px;
+                }
+
+                .pressSpace_pulse {
+                    animation: pulseSpace 5s linear infinite;
+                }
             }
         }
     }
 }
 
-@keyframes pulseColor {
+@keyframes pulseSpace {
     0% {
         box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
         color: gray;
@@ -152,9 +180,9 @@ body {
 
     10% {
         border: 2px solid white;
-        box-shadow: 0 0 40px aquamarine, inset 0 0 40px aquamarine;
+        box-shadow: 0 0 40px var(--barEnphasis), inset 0 0 40px var(--barEnphasis);
         color: white;
-        text-shadow: 0 0 4px aquamarine;
+        text-shadow: 0 0 4px var(--barEnphasis);
     }
 
     20% {
@@ -162,6 +190,20 @@ body {
         box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
         color: gray;
         text-shadow: 0 0 10px transparent;
+    }
+}
+
+@keyframes barReady {
+    0% {
+        box-shadow: 0 0 40px transparent;
+    }
+
+    10% {
+        box-shadow: 0 0 40px var(--barEnphasis), inset 0 0 20px var(--barEnphasis);
+    }
+
+    20% {
+        box-shadow: 0 0 40px transparent;
     }
 }
 
@@ -178,18 +220,22 @@ body {
     position: relative;
 }
 
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
 .visible {
     opacity: 1;
 }
 
 .invisible {
     opacity: 0;
-}
-
-.centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .tempo300 {
@@ -214,6 +260,6 @@ body {
     font-size: 16px;
     letter-spacing: 4px;
     color: gray;
-    border: 2px solid rgba(255, 255, 255, 0.075);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
 }

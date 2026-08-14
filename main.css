@@ -66,14 +66,14 @@ body {
         .gameBox {
             width: 100%;
             height: calc(100% - 100px);
-            border: 6px solid var(--white);
+            border: 5px solid var(--white);
 
             .gameLineSeparator {
                 z-index: -1;
                 left: calc(50% - 2px);
                 width: 4px;
                 height: 100%;
-                background-color: gray;
+                background-color: rgba(128, 128, 128, 0.2);
             }
 
             .bar {
@@ -92,28 +92,23 @@ body {
             }
 
             .ball {
-                width: 20px;
+                width: 24px;
                 aspect-ratio: 1/1;
+                background-color: white;
+                box-shadow: 0 0 30px white;
                 border-radius: 50%;
-                background-color: var(--white);
             }
 
-            .selectionBox {
+            .sideSelectorsBox {
                 display: flex;
                 justify-content: space-between;
                 width: 600px;
                 height: 100px;
 
                 .sideBox {
+                    z-index: 99;
                     width: 200px;
                     height: 100%;
-                    font-family: "Orbitron";
-                    font-weight: bolder;
-                    font-size: 24px;
-                    letter-spacing: 4px;
-                    color: gray;
-                    border: 3px solid rgba(255, 255, 255, 0.075);
-                    border-radius: 8px;
                     cursor: pointer;
                     transition: 100ms;
 
@@ -122,12 +117,53 @@ body {
                         border: 3px solid white;
                         box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
                     }
+
+                    &:has(.hiddenSelector:checked) {
+                        color: white;
+                        border: 3px solid white;
+                        box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
+                    }
                 }
+            }
+
+            .sideSelectorsBox_expanded {
+                width: 900px;
+            }
+
+            .pressSpace {
+                width: 400px;
+                height: 60px;
+                background-color: var(--black);
+            }
+
+            .pressSpace_pulse {
+                animation: pulseColor 5s linear infinite;
             }
         }
     }
 }
 
+@keyframes pulseColor {
+    0% {
+        box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
+        color: gray;
+        text-shadow: 0 0 10px transparent;
+    }
+
+    10% {
+        border: 2px solid white;
+        box-shadow: 0 0 40px aquamarine, inset 0 0 40px aquamarine;
+        color: white;
+        text-shadow: 0 0 4px aquamarine;
+    }
+
+    20% {
+        border: 2px solid gray;
+        box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
+        color: gray;
+        text-shadow: 0 0 10px transparent;
+    }
+}
 
 .max {
     width: 100%;
@@ -142,10 +178,6 @@ body {
     position: relative;
 }
 
-.hidden {
-    display: none;
-}
-
 .visible {
     opacity: 1;
 }
@@ -158,4 +190,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.tempo300 {
+    transition: 300ms ease-out;
+}
+
+.tempo600 {
+    transition: 600ms;
+}
+
+.hiddenSelector {
+    position: absolute;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.gameText {
+    font-family: "Orbitron";
+    font-weight: bolder;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: gray;
+    border: 2px solid rgba(255, 255, 255, 0.075);
+    border-radius: 8px;
 }

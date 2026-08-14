@@ -10,7 +10,8 @@
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -26,14 +27,17 @@
         </div>
         <div id="gameBox" class="gameBox relative centered">
             <div class="gameLineSeparator absolute"></div>
-            <div id="barLeft" class="bar leftBar absolute hidden invisible"></div>
-            <div id="barRight" class="bar rightBar absolute hidden invisible"></div>
-            <div id="ball" class="ball absolute hidden invisible"></div>
+            <div id="barLeft" class="bar leftBar absolute invisible tempo300"></div>
+            <div id="barRight" class="bar rightBar absolute invisible tempo300"></div>
+            <div id="ball" class="ball absolute invisible tempo300"></div>
 
-            <div class="selectionBox">
-                <div class="sideBox centered">LEFT</div>
-                <div class="sideBox centered">RIGHT</div>
+            <div class="sideSelectorsBox tempo600">
+                <div id="sideLeft" class="sideBox gameText centered relative">LEFT <input class="hiddenSelector" type="radio"
+                        name="sideSelector" id="sideSelectorLeft"></div>
+                <div id="sideLeft" class="sideBox gameText centered relative">RIGHT <input class="hiddenSelector" type="radio"
+                        name="sideSelector" id="sideSelectorRight"></div>
             </div>
+            <div class="pressSpace gameText absolute centered invisible tempo300">SPACE</div>
         </div>
     </div>
 

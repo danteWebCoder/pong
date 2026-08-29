@@ -14,37 +14,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <div class="mainContainer max">
+<body class="centered">
+    <div class="gameContainer max columnCentered">
         <div class="topBox">
             <div class="counterBox max">
-                <div class="counter">10</div>
+                <span id="counterLeft" class="counter">0</span>
             </div>
             <div class="lineSeparator"></div>
             <div class="counterBox max">
-                <div class="counter">20</div>
+                <span id="counterRight" class="counter">0</span>
             </div>
         </div>
-        <div class="gameContainer centered">
-            <div id="gameBox" class="gameBox max relative centered">
-                <div class="gameLineSeparator absolute"></div>
+
+        <div id="gameBox" class="gameBox max relative centered">
+            <div class="gameField max relative">
                 <div id="barLeft" class="bar leftBar absolute invisible tempo300"></div>
                 <div id="barRight" class="bar rightBar absolute invisible tempo300"></div>
+                <div id="fieldSeparator" class="fieldSeparator absolute invisible tempo300"></div>
                 <div id="ball" class="ball absolute invisible tempo300"></div>
-
-                <div class="sideSelectorsBox tempo600">
-                    <div id="sideLeft" class="sideBox gameText centered relative">LEFT <input class="hiddenSelector"
-                            type="radio" name="sideSelector" id="sideSelectorLeft"></div>
-                    <div id="sideLeft" class="sideBox gameText centered relative">RIGHT <input class="hiddenSelector"
-                            type="radio" name="sideSelector" id="sideSelectorRight"></div>
-                </div>
-                <div class="pressSpace gameText absolute centered tempo300 invisible hidden">
-                    <div class="spaceText tempo300">SPACE</div></div>
             </div>
+
+            <div id="selectionBox" class="selectionBox selectionBox_contracted absolute hidden invisible tempo600">
+                <div id="selectorGameLeft" class="sideSelector gameText centered">LEFT</div>
+                <div id="selectorGameRight" class="sideSelector gameText centered">RIGHT</div>
+            </div>
+
+            <div id="countDownBox" class="countDownBox centered absolute hidden"></div>
+
         </div>
     </div>
 
-    <script type="module" src="control.js"></script>
+
+
+    <script type="module" src="control2.js"></script>
 </body>
 
 </html>

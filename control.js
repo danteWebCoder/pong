@@ -17,7 +17,7 @@ const getGameBoxSize = () => gameBoxSize = [gameBox.clientWidth, gameBox.clientH
 const getBallPos = () => { return [ball.offsetLeft, ball.offsetTop] }
 const sleep = async (tempo) => { await new Promise(resolve => setTimeout(resolve, tempo)) }
 
-/* prepare side */
+/* NEW GAME */
 const selectSide = () => {
     const sideSelectorLeft = document.querySelector("#sideSelectorLeft")
     const sideSelectorRight = document.querySelector("#sideSelectorRight")
@@ -39,13 +39,12 @@ const selectSide = () => {
 
 const prepareSide = async () => {
     sideLeft ? setBallToLeft() : setBallToRight()
-    await hideSideSelectors()
     await gameElementsVisibility()
     const pressSpace = activeSpace()
     await loadSpaceBox()
 }
 
-const setBallToLeft = () => {
+/* const setBallToLeft = () => {
     ball.style.left = "40px"
     ball.style.top = `calc(50% - ${ballSize / 2}px)`
 }
@@ -54,19 +53,13 @@ const setBallToRight = () => {
     ball.style.left = `calc(100% - (${ballSize}px + 40px))`
     ball.style.top = `calc(50% - ${ballSize / 2}px)`
 }
-
+ */
+/* game intro */
 const gameElementsVisibility = async () => {
     const visualElements = [ball, barLeft, barRight];
     const ballTempo = parseFloat(getComputedStyle(ball).getPropertyValue("transition")) * 1000
     visualElements.forEach(item => item.classList.replace("invisible", "visible"))
     await sleep(ballTempo)
-}
-
-const hideSideSelectors = async () => {
-    const sideSelectorsBox = document.querySelector(".sideSelectorsBox")
-    const boxTempo = parseFloat(getComputedStyle(sideSelectorsBox).getPropertyValue("transition")) * 1000
-    sideSelectorsBox.classList.add("sideSelectorsBox_expanded", "invisible")
-    await sleep(boxTempo)
 }
 
 
@@ -95,17 +88,19 @@ const activeSpace = () => {
     document.addEventListener("keypress", async (e) => {
         if (e.code === "Space") {
             unloadSpaceBox()
+            shoot()
         }
     })
     return pressSpace
 }
 
-/* active side */
-const activeSide = () => {
-    activeBar()
+/* start game */
+const startGame = () => {
+
 }
 
-const activeBar = () => {
+
+const activeBarEvents = () => {
     document.addEventListener("keydown", (e) => {
         e.code === "ArrowUp" && moveBar("up")
         e.code === "ArrowDown" && moveBar("down")
@@ -125,7 +120,7 @@ const moveBar = (dir) => {
 const init = async () => {
     getGameBoxSize()
     selectSide()
-    activeSide()
+    startGame()
 }
 
 init()

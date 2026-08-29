@@ -19,7 +19,7 @@ body {
     background-color: var(--black);
     padding: 20px;
 
-    .mainContainer {
+    .gameContainer {
 
         .topBox {
             display: flex;
@@ -63,147 +63,122 @@ body {
 
             }
         }
+    }
 
-        .gameContainer {
-            width: 100%;
-            height: calc(100% - 100px);
-            padding: 20px;
-            border: 4px solid var(--white);
-            border-radius: 20px;
+    .gameBox {
+        border: 3px solid gray;
+        border-radius: 16px;
+        padding: 20px;
 
-            .gameBox {
-                border: 2px solid gray;
-                border-radius: 16px;
-                background-image: radial-gradient(circle, rgba(105, 105, 105, 0.253) 1px, transparent 1px);
-                background-size: 4px 4px;
-                box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.5);
-                overflow: hidden;
+        .gameField {
+            box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.8);
+            border: 1px solid gray;
+            border-radius: 12px;
+            background-image: radial-gradient(circle, rgba(105, 105, 105, 0.253) 1px, transparent 1px);
+            background-size: 4px 4px;
+            overflow: hidden;
 
-                .gameLineSeparator {
-                    z-index: -1;
-                    left: calc(50% - 2px);
-                    width: 4px;
-                    height: 100%;
-                    background-color: rgba(128, 128, 128, 0.2);
+            .side {
+                width: calc(50% - 6px);
+                height: 100%;
+                opacity: 0.1;
+            }
+
+            .fieldSeparator {
+                left: calc(50% - 5px);
+                height: 100%;
+                border: 5px dashed rgb(70, 70, 70);
+            }
+
+            .bar {
+                top: calc(50% - 50px);
+                width: 20px;
+                height: 100px;
+                border: 2px solid white;
+                border-radius: 4px;
+                background-color: rgba(255, 255, 255, 0.6);
+            }
+
+            .barReady {
+                animation: barReady 5s linear infinite;
+            }
+
+            .leftBar {
+                left: 20px;
+            }
+
+            .rightBar {
+                right: 20px
+            }
+
+            .ball {
+                width: 24px;
+                aspect-ratio: 1/1;
+                background-color: white;
+                box-shadow: 0 0 30px white;
+                border-radius: 50%;
+            }
+
+            .ball_inCenter {
+                top: calc(50% - 12px);
+                left: calc(50% - 12px);
+            }
+        }
+
+        .selectionBox {
+            top: calc(50% - 50px);
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            height: 100px;
+
+            .sideSelector {
+                z-index: 99;
+                width: 200px;
+                height: 100%;
+                background-color: var(--black);
+                cursor: pointer;
+                transition: 100ms;
+
+                &:hover {
+                    color: white;
+                    border: 3px solid white;
+                    box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
                 }
 
-                .bar {
-                    top: calc(50% - 50px);
-                    width: 20px;
-                    height: 100px;
-                    border: 2px solid white;
-                    border-radius: 4px;
-                    background-color: rgba(255, 255, 255, 0.6);
-                }
-
-                .barReady {
-                    animation: barReady 5s linear infinite;
-                }
-
-                .leftBar {
-                    left: 20px;
-                }
-
-                .rightBar {
-                    right: 20px
-                }
-
-                .ball {
-                    width: 24px;
-                    aspect-ratio: 1/1;
-                    background-color: white;
-                    box-shadow: 0 0 30px white;
-                    border-radius: 50%;
-                }
-
-                .sideSelectorsBox {
-                    display: flex;
-                    justify-content: space-between;
-                    width: 600px;
-                    height: 100px;
-
-                    .sideBox {
-                        z-index: 99;
-                        width: 200px;
-                        height: 100%;
-                        background-color: var(--black);
-                        cursor: pointer;
-                        transition: 100ms;
-
-                        &:hover {
-                            color: white;
-                            border: 3px solid white;
-                            box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
-                        }
-
-                        &:has(.hiddenSelector:checked) {
-                            color: white;
-                            border: 3px solid white;
-                            box-shadow: 0 0 40px var(--enphasis), inset 0 0 40px var(--enphasis);
-                        }
-                    }
-                }
-
-                .sideSelectorsBox_expanded {
-                    width: 900px;
-                }
-
-                .pressSpace {
-                    width: 0;
-                    height: 60px;
-                    background-color: var(--black);
-                    overflow: hidden ;
-
-                    .spaceText {
-                        display: flex;
-                    }
-                }
-
-                .pressSpace_expanded {
-                    width: 400px;
-                }
-
-                .pressSpace_pulse {
-                    animation: pulseSpace 5s linear infinite;
+                &:has(.hiddenSelector:checked) {
+                    color: white;
+                    border: 3px solid white;
+                    box-shadow: 0 0 40px white, inset 0 0 40px white;
                 }
             }
         }
-    }
-}
 
-@keyframes pulseSpace {
-    0% {
-        box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
-        color: gray;
-        text-shadow: 0 0 10px transparent;
-    }
+        .selectionBox_contracted {
+            width: 400px;
+        }
 
-    10% {
-        border: 2px solid white;
-        box-shadow: 0 0 40px var(--barEnphasis), inset 0 0 40px var(--barEnphasis);
-        color: white;
-        text-shadow: 0 0 4px var(--barEnphasis);
-    }
+        .selectionBox_expanded {
+            width: 50%;
+        }
 
-    20% {
-        border: 2px solid gray;
-        box-shadow: 0 0 40px transparent, inset 0 0 40px transparent;
-        color: gray;
-        text-shadow: 0 0 10px transparent;
-    }
-}
+        .countDownBox {
+            top: calc(50% - 200px);
+            width: 400px;
+            height: 400px;
 
-@keyframes barReady {
-    0% {
-        box-shadow: 0 0 40px transparent;
-    }
+            .number {
+                color: white;
+                font-size: 0;
+                font-family: "Audiowide";
+                transition: 1000ms;
+            }
 
-    10% {
-        box-shadow: 0 0 40px var(--barEnphasis), inset 0 0 20px var(--barEnphasis);
-    }
-
-    20% {
-        box-shadow: 0 0 40px transparent;
+            .number_in {
+                font-size: 200px;
+                opacity: 0;
+            }
+        }
     }
 }
 
@@ -226,6 +201,12 @@ body {
     justify-content: center;
 }
 
+.columnCentered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .hidden {
     display: none;
 }
@@ -244,6 +225,10 @@ body {
 
 .tempo600 {
     transition: 600ms;
+}
+
+.tempo1000 {
+    transition: 1000ms ease-in-out;
 }
 
 .hiddenSelector {

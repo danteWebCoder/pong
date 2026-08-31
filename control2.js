@@ -1,41 +1,40 @@
 import * as HELPER from "./helpers.js"
 
-const gameBox = document.querySelector("#gameBox")
-const ball = document.querySelector("#ball")
-const barLeft = document.querySelector("#barLeft")
-const barRight = document.querySelector("#barRight")
-const fieldSeparator = document.querySelector("#fieldSeparator")
-const pressSpace = document.querySelector(".pressSpace")
+const gameField = document.querySelector("#gameField")
+const gameElements = {
+    ball: document.querySelector("#ball"),
+    barLeft: document.querySelector("#barLeft"),
+    barRight: document.querySelector("#barRight"),
+    fieldSeparator: document.querySelector("#fieldSeparator"),
+}
+
 const sideSelectors = document.querySelectorAll(".sideSelector")
+let gameSide = null
+
+
+
+
+
 
 const ballSize = parseFloat(getComputedStyle(ball).getPropertyValue("width"))
 const steps = 8
 const tempo = 200
 
-let gameBoxSize = null
+let gameFieldSize = null
 let sideLeft = null
 let bar = null
 let barPos = null /* vertical center */
 
-const getGameBoxSize = () => gameBoxSize = [gameBox.clientWidth, gameBox.clientHeight]
+const getgameFieldSize = () => gameFieldSize = [gameField.clientWidth, gameField.clientHeight]
 const getBallPos = () => { return [ball.offsetLeft, ball.offsetTop] }
 
-/* NEW GAME */
-const initNewGame = async () => {
-    await activeSelectionBox(true)
-
-    const controller = new AbortController()
-    const { signal } = controller
-    sideSelectors.forEach(item => {
-        item.addEventListener("click", async (e) => {
-            await activeSelectionBox(false)
-            await prepareGameField(e.target.id)
-            controller.abort()
-        }, { signal })
-    })
+/* PREPARE NEW GAME */
+const prepareNewGame = async () => {
+    await loadSelectionBox(true)
+    gameSide = await waitForSelection()
 }
 
-const activeSelectionBox = async (open) => {
+const loadSelectionBox = async (open) => {
     const selectionBox = document.querySelector("#selectionBox")
     const boxTempo = HELPER.getTime(selectionBox)
     if (open) {
@@ -52,34 +51,76 @@ const activeSelectionBox = async (open) => {
     }
 }
 
+const waitForSelection = async () => {
+    return new Promise((resolve) => {
+        const controller = new AbortController()
+        const { signal } = controller
+        sideSelectors.forEach(item => {
+            item.addEventListener("click", async (e) => {
+                await loadSelectionBox(false)
+                await prepareGameField()
+                controller.abort()
+                resolve(e.target.id === gameLeft ? "left" : "right")
+            }, { signal })
+        })
+    })
+}
+
+const prepareGameField = async () => {
+    const tempo = HELPER.getTime(gameElements.ball)
+    await countDown()
+    Object.values(gameElements).forEach(item => item.classList.remove("invisible"))
+    await HELPER.sleep(tempo)
+}
+
 const countDown = async () => {
     const countDownBox = document.querySelector("#countDownBox")
     countDownBox.classList.remove("hidden")
-    let numberTempo = null
 
     for (let i = 3; i >= 0; i--) {
         const number = HELPER.addTag(countDownBox, "div", "absolute number tempo1000")
         number.textContent = i
-        !numberTempo && (numberTempo = HELPER.getTime(number))
         await HELPER.sleep(100)
         number.classList.add("number_in")
-        await HELPER.sleep(numberTempo - 100)
+        await HELPER.sleep(900)
         countDownBox.innerHTML = ""
     }
 }
 
-const prepareGameField = async () => {
-    const elementsTempo = HELPER.getTime(ball)
-    const gameElements = [ball, fieldSeparator, barLeft, barRight]
-    await countDown()
-    ball.classList.add("ball_inCenter")
-    gameElements.forEach(item => item.classList.remove("invisible"))
-    await HELPER.sleep(elementsTempo)
+/* INIT GAME */
+const initGame = () => {
+    const gameFieldHeight = document.querySelector("#gameField").clientHeight
+    moveBarEvents(gameFieldHeight)
+}
+
+const moveBarEvents = () => {
+    document.addEventListener("keydown", (e) => {
+        e.code === "ArrowLeft" && moveBar("up")
+        e.code === "ArrowRight" && moveBar("down")
+    })
+
+    window.addEventListener("wheel", (e) => {
+        e.deltaY < 0 && moveBar("up")
+        e.deltaY > 0 && moveBar("down")
+    })
+}
+
+const moveBar = (dir) => {
+    let bar = sideLeft ? gameElements.barLeft : gameElements.barRight
+    const gameFieldHeight = document.querySelector("#gameField").clientHeight
+
+    barPos === null && (barPos = steps / 2)
+    const moveStep = (gameFieldHeight - bar.offsetHeight) / 8
+    if (dir === "up" && barPos > 0) barPos--
+    if (dir === "down" && barPos < steps) barPos++
+    bar.style.top = `${moveStep * barPos}px`
 }
 
 /* init */
 const init = async () => {
-    await initNewGame()
+    await prepareNewGame()
+    initGame()
+
 }
 
 init()

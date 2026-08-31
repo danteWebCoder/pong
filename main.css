@@ -71,8 +71,8 @@ body {
         padding: 20px;
 
         .gameField {
-            box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.8);
-            border: 1px solid gray;
+            box-shadow: inset 10px 10px 100px black;
+            border: 2px solid gray;
             border-radius: 12px;
             background-image: radial-gradient(circle, rgba(105, 105, 105, 0.253) 1px, transparent 1px);
             background-size: 4px 4px;
@@ -94,13 +94,9 @@ body {
                 top: calc(50% - 50px);
                 width: 20px;
                 height: 100px;
-                border: 2px solid white;
+                border: 3px solid white;
                 border-radius: 4px;
-                background-color: rgba(255, 255, 255, 0.6);
-            }
-
-            .barReady {
-                animation: barReady 5s linear infinite;
+                background-color: rgba(255, 255, 255, 0.4);
             }
 
             .leftBar {
@@ -112,16 +108,14 @@ body {
             }
 
             .ball {
+                top: calc(50% - 12px);
+                left: calc(50% - 12px);
+
                 width: 24px;
                 aspect-ratio: 1/1;
                 background-color: white;
                 box-shadow: 0 0 30px white;
                 border-radius: 50%;
-            }
-
-            .ball_inCenter {
-                top: calc(50% - 12px);
-                left: calc(50% - 12px);
             }
         }
 
@@ -143,14 +137,15 @@ body {
                 &:hover {
                     color: white;
                     border: 3px solid white;
-                    box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
                 }
+            }
 
-                &:has(.hiddenSelector:checked) {
-                    color: white;
-                    border: 3px solid white;
-                    box-shadow: 0 0 40px white, inset 0 0 40px white;
-                }
+            .selectorLeft:hover {
+                box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
+            }
+
+            .selectorRight:hover {
+                box-shadow: 0 0 40px tomato, inset 0 0 40px tomato;
             }
         }
 

@@ -1,6 +1,8 @@
 import * as HELPER from "./helpers.js"
 
 const gameField = document.querySelector("#gameField")
+const gameFieldSize = { width: gameField.clientWidth, height: gameField.clientHeight }
+
 const gameElements = {
     ball: document.querySelector("#ball"),
     barLeft: document.querySelector("#barLeft"),
@@ -11,28 +13,26 @@ const gameElements = {
 const sideSelectors = document.querySelectorAll(".sideSelector")
 const barSteps = 8
 
-let gameSide = null
+const game = {
+    side: null,
+    speed: 1,
+    ballSize: parseFloat(getComputedStyle(gameElements.ball).getPropertyValue("width")),
+    ballPos: [
+        (50 - (gameElements.ball.offsetWidth / 2 / gameFieldSize.width) * 100) + "%", /* center x absolute */
+        (50 - (gameElements.ball.offsetWidth / 2 / gameFieldSize.height) * 100) + "%" /* center y absolute */
+    ],
+    barSize: (gameElements.barLeft.offsetHeight / gameFieldSize.height) * 100,
+    barPos: barSteps / 2
+}
 
+console.log(game)
 
-
-
-
-
-const ballSize = parseFloat(getComputedStyle(ball).getPropertyValue("width"))
-const tempo = 200
-
-let gameFieldSize = null
-let sideLeft = null
-let bar = null
-let barPos = null /* vertical center */
-
-const getgameFieldSize = () => gameFieldSize = [gameField.clientWidth, gameField.clientHeight]
-const getBallPos = () => { return [ball.offsetLeft, ball.offsetTop] }
-
+/* const getBallPos = () => { return [gameElements.ball.offsetLeft, gameElements.ball.offsetTop] }
+ */
 /* PREPARE NEW GAME */
 const prepareNewGame = async () => {
     await loadSelectionBox(true)
-    gameSide = await waitForSelection()
+    game.side = await waitForSelection()
 }
 
 const loadSelectionBox = async (open) => {
@@ -90,11 +90,11 @@ const countDown = async () => {
 
 /* INIT GAME */
 const initGame = () => {
-    const gameFieldHeight = document.querySelector("#gameField").clientHeight
-    moveBarEvents(gameFieldHeight)
+    events_moveBar()
+    moveBall()
 }
 
-const moveBarEvents = () => {
+const events_moveBar = () => {
     document.addEventListener("keydown", (e) => {
         e.code === "ArrowLeft" && moveBar("up")
         e.code === "ArrowRight" && moveBar("down")
@@ -116,6 +116,13 @@ const moveBar = (dir) => {
     if (dir === "up" && barPos > 0) barPos--
     if (dir === "down" && barPos < barSteps) barPos++
     bar.style.top = `${moveStep * barPos}%`
+}
+
+const moveBall = () => {
+    const maxLeft = "0%"
+    const maxRight = (gameFieldSize.width - game.ballSize) / gameFieldSize.width * 100 + "%"
+    gameElements.ball.style.transition = `${game.speed * 1000}ms linear`
+    gameElements.ball.style.left = game.side === "left" ? "0" : maxRight
 }
 
 /* init */

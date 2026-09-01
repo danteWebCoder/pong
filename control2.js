@@ -9,6 +9,8 @@ const gameElements = {
 }
 
 const sideSelectors = document.querySelectorAll(".sideSelector")
+const barSteps = 8
+
 let gameSide = null
 
 
@@ -17,7 +19,6 @@ let gameSide = null
 
 
 const ballSize = parseFloat(getComputedStyle(ball).getPropertyValue("width"))
-const steps = 8
 const tempo = 200
 
 let gameFieldSize = null
@@ -60,7 +61,7 @@ const waitForSelection = async () => {
                 await loadSelectionBox(false)
                 await prepareGameField()
                 controller.abort()
-                resolve(e.target.id === gameLeft ? "left" : "right")
+                resolve(e.target.id === "gameLeft" ? "left" : "right")
             }, { signal })
         })
     })
@@ -106,14 +107,15 @@ const moveBarEvents = () => {
 }
 
 const moveBar = (dir) => {
-    let bar = sideLeft ? gameElements.barLeft : gameElements.barRight
+    let bar = gameSide === "left" ? gameElements.barLeft : gameElements.barRight
     const gameFieldHeight = document.querySelector("#gameField").clientHeight
 
-    barPos === null && (barPos = steps / 2)
-    const moveStep = (gameFieldHeight - bar.offsetHeight) / 8
+    barPos === null && (barPos = barSteps / 2)
+    const barHeightPercent = (bar.offsetHeight / gameFieldHeight) * 100
+    const moveStep = (100 - barHeightPercent) / barSteps
     if (dir === "up" && barPos > 0) barPos--
-    if (dir === "down" && barPos < steps) barPos++
-    bar.style.top = `${moveStep * barPos}px`
+    if (dir === "down" && barPos < barSteps) barPos++
+    bar.style.top = `${moveStep * barPos}%`
 }
 
 /* init */

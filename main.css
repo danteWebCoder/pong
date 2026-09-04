@@ -54,19 +54,17 @@ body {
                     .counter {
                         justify-content: flex-end;
                     }
-
                 }
 
                 &:nth-child(2 of &) {
                     justify-content: flex-start;
                 }
-
             }
         }
     }
 
     .gameBox {
-        border: 3px solid gray;
+        border: 2px solid grey;
         border-radius: 16px;
         padding: 20px;
 
@@ -115,7 +113,7 @@ body {
                 aspect-ratio: 1/1;
                 background-color: white;
                 box-shadow: 0 0 30px white;
-                border-radius: 50%;
+                border-radius: 4px;
             }
         }
 

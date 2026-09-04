@@ -1,7 +1,7 @@
 import * as HELPER from "./helpers.js"
 
-const gameField = document.querySelector("#gameField")
-const gameFieldSize = { width: gameField.clientWidth, height: gameField.clientHeight }
+const fieldEl = document.querySelector("#gameField")
+const filedInfo = { "x": fieldEl.clientWidth, "y": fieldEl.clientHeight }
 
 const gameElements = {
     ball: document.querySelector("#ball"),
@@ -17,22 +17,19 @@ const game = {
     side: null,
     speed: 1,
     ballSize: parseFloat(getComputedStyle(gameElements.ball).getPropertyValue("width")),
-    ballPos: [
-        (50 - (gameElements.ball.offsetWidth / 2 / gameFieldSize.width) * 100) + "%", /* center x absolute */
-        (50 - (gameElements.ball.offsetWidth / 2 / gameFieldSize.height) * 100) + "%" /* center y absolute */
-    ],
-    barSize: (gameElements.barLeft.offsetHeight / gameFieldSize.height) * 100,
-    barPos: barSteps / 2
+    ballPos: { x: 50, y: 50 },
+    bar: null,
+    barSize: null,
+    barPos: 4,
+    barTop: null
 }
 
-console.log(game)
+const getBallPos = () => { return [game.ballPos.x, game.ballPos.y] }
 
-/* const getBallPos = () => { return [gameElements.ball.offsetLeft, gameElements.ball.offsetTop] }
- */
 /* PREPARE NEW GAME */
 const prepareNewGame = async () => {
     await loadSelectionBox(true)
-    game.side = await waitForSelection()
+    await waitForSelection()
 }
 
 const loadSelectionBox = async (open) => {
@@ -61,7 +58,9 @@ const waitForSelection = async () => {
                 await loadSelectionBox(false)
                 await prepareGameField()
                 controller.abort()
-                resolve(e.target.id === "gameLeft" ? "left" : "right")
+                game.side = e.target.id === "selectorLeft" ? "left" : "right"
+                game.bar = document.querySelector(game.side === "left" ? "#barLeft" : "#barRight")
+                resolve()
             }, { signal })
         })
     })
@@ -91,7 +90,8 @@ const countDown = async () => {
 /* INIT GAME */
 const initGame = () => {
     events_moveBar()
-    moveBall()
+    moveBall(game.side === "left" ? 0 : 100, -25)
+    getFrame()
 }
 
 const events_moveBar = () => {
@@ -106,28 +106,39 @@ const events_moveBar = () => {
     })
 }
 
-const moveBar = (dir) => {
-    let bar = gameSide === "left" ? gameElements.barLeft : gameElements.barRight
-    const gameFieldHeight = document.querySelector("#gameField").clientHeight
-
-    barPos === null && (barPos = barSteps / 2)
-    const barHeightPercent = (bar.offsetHeight / gameFieldHeight) * 100
+const moveBar = (direction) => {
+    const barHeightPercent = (game.bar.offsetHeight / filedInfo.y) * 100
     const moveStep = (100 - barHeightPercent) / barSteps
-    if (dir === "up" && barPos > 0) barPos--
-    if (dir === "down" && barPos < barSteps) barPos++
-    bar.style.top = `${moveStep * barPos}%`
+    if (direction === "up" && game.barPos > 0) game.barPos--
+    if (direction === "down" && game.barPos < barSteps) game.barPos++
+    game.bar.style.top = `${moveStep * game.barPos}%`
 }
 
-const moveBall = () => {
-    const maxLeft = "0%"
-    const maxRight = (gameFieldSize.width - game.ballSize) / gameFieldSize.width * 100 + "%"
+const moveBall = (x = null, y = null) => {
+    x !== null && (game.ballPos.x = x)
+    y !== null && (game.ballPos.y = game.ballPos.y + y)
+
     gameElements.ball.style.transition = `${game.speed * 1000}ms linear`
-    gameElements.ball.style.left = game.side === "left" ? "0" : maxRight
+    x !== null && (gameElements.ball.style.left = `${game.ballPos.x}%`)
+    y !== null && (gameElements.ball.style.top = `${game.ballPos.y}%`)
+}
+
+const getPositionBar = () => {
+    const bar = game.side === "left" ? gameElements.barLeft : gameElements.barRight
+    const barTop = +((bar.offsetTop / filedInfo.y) * 100).toFixed(2) /* + to number instant */
+    game.barTop !== barTop && (game.barTop = barTop)
+    return barTop
+}
+
+const getFrame = () => {
+    console.log(getPositionBar())
+    requestAnimationFrame(getFrame)
 }
 
 /* init */
 const init = async () => {
     await prepareNewGame()
+    console.log(game)
     initGame()
 
 }

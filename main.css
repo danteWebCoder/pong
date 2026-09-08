@@ -8,9 +8,10 @@
 :root {
     --white: rgb(220, 220, 220);
     --whiteMedium: rgb(180, 180, 180);
+    --whiteLight: rgba(220, 220, 200, 0.2);
     --black: rgb(30, 30, 30);
-    --enphasis: rgb(235, 57, 57);
-    --barEnphasis: aquamarine;
+    --enphasis1: aquamarine;
+    --enphasis2: rgb(235, 57, 57);
 }
 
 body {
@@ -23,41 +24,91 @@ body {
 
         .topBox {
             display: flex;
-            align-items: center;
             width: 100%;
             height: 100px;
 
-            .lineSeparator {
-                width: 8px;
-                height: 50%;
-                margin: 0 80px;
-                background-color: var(--whiteMedium);
-            }
+            .countersBox {
+                width: 900px;
+                height: 100%;
 
-            .counterBox {
-                display: flex;
-                align-items: center;
-
-                .counter {
-                    display: flex;
-                    width: 200px;
-                    height: 100%;
-                    font-family: "Audiowide";
-                    font-Size: 80px;
-                    font-weight: bolder;
-                    color: var(--whiteMedium);
+                .lineSeparator {
+                    width: 8px;
+                    height: 50%;
+                    margin: 0 6%;
+                    background-color: var(--whiteMedium);
                 }
 
-                &:nth-child(1 of &) {
-                    justify-content: flex-end;
+                .cBox {
+                    display: flex;
+                    align-items: center;
 
                     .counter {
+                        display: flex;
+                        width: 200px;
+                        height: 100%;
+                        font-family: "Audiowide";
+                        font-Size: 80px;
+                        font-weight: bolder;
+                        color: var(--whiteMedium);
+                    }
+
+                    &:nth-child(1 of &) {
                         justify-content: flex-end;
+
+                        .counter {
+                            justify-content: flex-end;
+                        }
+                    }
+
+                    &:nth-child(2 of &) {
+                        justify-content: flex-start;
+                    }
+                }
+            }
+
+            .buttonsBox {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: auto;
+                height: 100%;
+
+                .button {
+                    width: 120px;
+                    height: 40px;
+                    border: 2px solid rgb(58, 58, 58);
+                    border-radius: 8px;
+                    color: var(--whiteLight);
+                    font-family: "Orbitron";
+                    font-size: 18px;
+                    font-weight: lighter;
+
+                    &:not(:nth-child(3 of &)) {
+                        margin-right: 20px;
                     }
                 }
 
-                &:nth-child(2 of &) {
-                    justify-content: flex-start;
+                .active {
+                    color: var(--white);
+                    cursor: pointer;
+
+                    &:hover {
+                        color: var(--white);
+                        border: 2px solid white;
+                        box-shadow:
+                            0 0 10px var(--enphasis2),
+                            0 0 20px var(--enphasis2),
+                            0 0 10px var(--enphasis2),
+                            inset 0 0 20px var(--enphasis2);
+                    }
+
+                    &:active {
+                        box-shadow:
+                            0 0 10px white,
+                            0 0 20px white,
+                            0 0 10px white,
+                            inset 0 0 20px white;
+                    }
                 }
             }
         }
@@ -82,8 +133,9 @@ body {
                 opacity: 0.1;
             }
 
-            .fieldSeparator {
-                left: calc(50% - 5px);
+            .fieldLine {
+                left:50%;
+                transform: translateX(-50%);
                 height: 100%;
                 border: 5px dashed rgb(70, 70, 70);
             }
@@ -106,8 +158,10 @@ body {
             }
 
             .ball {
-                top: calc(50% - 12px);
-                left: calc(50% - 12px);
+                transform: translate(-50%, -50%);
+                /* own centered */
+                top: 50%;
+                left: 50%;
 
                 width: 24px;
                 aspect-ratio: 1/1;
@@ -200,6 +254,16 @@ body {
     align-items: center;
 }
 
+.rowSpace {
+    display: flex;
+    justify-content: space-between;
+}
+
+.rowAlign {
+    display: flex;
+    align-items: center;
+}
+
 .hidden {
     display: none;
 }
@@ -210,6 +274,10 @@ body {
 
 .invisible {
     opacity: 0;
+}
+
+.tempo200 {
+    transition: 200ms;
 }
 
 .tempo300 {

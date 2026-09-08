@@ -16,21 +16,29 @@
 
 <body class="centered">
     <div class="gameContainer max columnCentered">
-        <div class="topBox">
-            <div class="counterBox max">
-                <span id="counterLeft" class="counter">0</span>
+        <div class="topBox rowSpace">
+            <div class="countersBox rowAlign">
+                <div class="cBox max">
+                    <span id="counterLeft" class="counter">0</span>
+                </div>
+                <div class="lineSeparator"></div>
+                <div class="cBox max">
+                    <span id="counterRight" class="counter">0</span>
+                </div>
             </div>
-            <div class="lineSeparator"></div>
-            <div class="counterBox max">
-                <span id="counterRight" class="counter">0</span>
+            <div class="buttonsBox">
+                <div id="new" class="button centered tempo200 active">new</div>
+                <div id="more" class="button centered tempo200">more</div>
+                <div id="less" class="button centered tempo200">less</div>
             </div>
+
         </div>
 
         <div class="gameBox max relative centered">
             <div id="gameField" class="gameField max relative">
-                <div id="barLeft" class="bar leftBar absolute invisible tempo300"></div>
-                <div id="barRight" class="bar rightBar absolute invisible tempo300"></div>
-                <div id="fieldSeparator" class="fieldSeparator absolute invisible tempo300"></div>
+                <div id="leftBar" class="bar leftBar absolute invisible tempo300"></div>
+                <div id="rightBar" class="bar rightBar absolute invisible tempo300"></div>
+                <div id="fieldLine" class="fieldLine absolute invisible tempo300"></div>
                 <div id="ball" class="ball absolute invisible tempo300"></div>
             </div>
 
@@ -46,7 +54,7 @@
 
 
 
-    <script type="module" src="control2.js"></script>
+    <script type="module" src="control3.js"></script>
 </body>
 
 </html>

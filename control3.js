@@ -46,7 +46,6 @@ const configureGame = (userSelection, gameObject, gameEls) => {
     gameObject.userField = userSelection
     gameObject.userBar = document.querySelector(`#${userSelection}Bar`)
     gameObject.userBarPos = 4
-    gameObject.userBarLimits = null /* funcion calcular limtes barra */
     gameObject.fieldDim = { "x": gameEls.field.offsetWidth, "y": gameEls.field.offsetHeight }
     gameObject.fieldBar = 50
     gameObject.barSteps = 8
@@ -90,6 +89,23 @@ const moveBar = (direction, game) => {
     if (direction === "up" && game.userBarPos > 0) game.userBarPos--
     if (direction === "down" && game.userBarPos < game.barSteps) game.userBarPos++
     game.userBar.style.top = `${moveStep * game.userBarPos}%`
+}
+
+let pause = false
+let cancel = false
+const datos = {dato1: 0}
+
+const getFrameInfo = async (datos) => {
+    while (!cancel) {
+        while (pause) {
+            await new Promise(resolve => requestAnimationFrame(resolve))
+            if (cancel) return
+        }
+        /* logica */
+        datos.dato1++
+        console.log(datos.dato1)
+        await new Promise(requestAnimationFrame)
+    }
 }
 
 /* init */

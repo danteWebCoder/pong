@@ -72,8 +72,24 @@ const showGameElements = async (gameEls) => {
 }
 
 /* game logic */
-const initGame = (game) => {
+const initGame = async (game) => {
+
+    const frame = {
+        pause: false,
+        cancel: false
+    }
+
+    getFrameInfo(frame)
     activeBars(game)
+
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    frame.pause = true
+    console.log(frame.pause)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    frame.pause = false
+    console.log(frame.pause)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    frame.cancel = true
 }
 
 const activeBars = (game) => {
@@ -91,19 +107,16 @@ const moveBar = (direction, game) => {
     game.userBar.style.top = `${moveStep * game.userBarPos}%`
 }
 
-let pause = false
-let cancel = false
-const datos = {dato1: 0}
 
-const getFrameInfo = async (datos) => {
-    while (!cancel) {
-        while (pause) {
+const getFrameInfo = async (frame) => {
+    while (!frame.cancel) {
+        while (frame.pause) {
             await new Promise(resolve => requestAnimationFrame(resolve))
-            if (cancel) return
+            if (frame.cancel) return
         }
         /* logica */
-        datos.dato1++
-        console.log(datos.dato1)
+        frame.test = "1"
+        console.log(frame.test, frame.pause)
         await new Promise(requestAnimationFrame)
     }
 }

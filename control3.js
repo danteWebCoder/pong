@@ -4,11 +4,10 @@ import * as HELPER from "./helpers.js"
 const newGame = async (gameObject, gameEls) => {
     await loadSelectionBox(true)
     const userSelection = await waitForSelection()
-    configureGame(userSelection, gameObject)
-    await gameCountDown(5)
+    configureGame(userSelection, gameObject, gameEls)
+
+    await gameCountDown(3)
     await showGameElements(gameEls)
-    /* test function mode */
-    addFieldReactivity(gameObject, gameEls)
 }
 
 const loadSelectionBox = async (open) => {
@@ -43,10 +42,14 @@ const waitForSelection = async () => {
     })
 }
 
-const configureGame = (userSelection, gameObject) => {
+const configureGame = (userSelection, gameObject, gameEls) => {
     gameObject.userField = userSelection
     gameObject.userBar = document.querySelector(`#${userSelection}Bar`)
-    console.log(userSelection, gameObject)
+    gameObject.userBarPos = 4
+    gameObject.userBarLimits = null /* funcion calcular limtes barra */
+    gameObject.fieldDim = { "x": gameEls.field.offsetWidth, "y": gameEls.field.offsetHeight }
+    gameObject.fieldBar = 50
+    gameObject.barSteps = 8
 }
 
 const gameCountDown = async (time) => {
@@ -69,29 +72,24 @@ const showGameElements = async (gameEls) => {
     await HELPER.sleep(tempo)
 }
 
-/* reactivity */
-const addFieldReactivity = (gameObject, gameEls) => {
-    const more = document.getElementById("more")
-    const less = document.getElementById("less")
-    const fieldSizeButtons = [more, less]
+/* game logic */
+const initGame = (game) => {
+    activeBars(game)
+}
 
-    fieldSizeButtons.forEach(item => {
-        !item.classList.contains("active") && item.classList.add("active")
-        item.addEventListener("click", (e) => {
-            console.log(e.target.id)
-            moveFieldLine(gameObject, gameEls)
-        })
+const activeBars = (game) => {
+    window.addEventListener("wheel", (e) => {
+        e.deltaY < 0 && moveBar("up", game)
+        e.deltaY > 0 && moveBar("down", game)
     })
 }
 
-const moveFieldLine = async (gameObject, gameEls) => {
-    const fieldRect = gameEls.field.getBoundingClientRect()
-    const lineRect = gameEls.line.getBoundingClientRect()
-    const lineLeft = lineRect.left - fieldRect.left + lineRect.width / 2
-
-
-    gameObject.linePos = +((lineLeft / fieldRect.width) * 100).toFixed(2)
-    console.log(gameObject.linePos, lineLeft)
+const moveBar = (direction, game) => {
+    const barHeightPercent = (game.userBar.offsetHeight / game.fieldDim.y) * 100
+    const moveStep = (100 - barHeightPercent) / game.barSteps
+    if (direction === "up" && game.userBarPos > 0) game.userBarPos--
+    if (direction === "down" && game.userBarPos < game.barSteps) game.userBarPos++
+    game.userBar.style.top = `${moveStep * game.userBarPos}%`
 }
 
 /* init */
@@ -108,11 +106,10 @@ const init = async () => {
     const game = {}
 
     newButton.addEventListener("click", async () => {
-/*         addFieldReactivity()
- */        await newGame(game, gameEls)
+        await newGame(game, gameEls)
+        initGame(game)
+        console.log(game)
     })
-
-
 }
 
 init()

@@ -74,8 +74,9 @@ body {
                 height: 100%;
 
                 .button {
-                    width: 120px;
+                    width: fit-content;
                     height: 40px;
+                    padding: 0 14px;
                     border: 2px solid rgb(58, 58, 58);
                     border-radius: 8px;
                     color: var(--whiteLight);
@@ -123,7 +124,7 @@ body {
             box-shadow: inset 10px 10px 100px black;
             border: 2px solid gray;
             border-radius: 12px;
-            background-image: radial-gradient(circle, rgba(105, 105, 105, 0.253) 1px, transparent 1px);
+            background-image: radial-gradient(circle, rgba(105, 105, 105, 0.25) 1px, transparent 1px);
             background-size: 4px 4px;
             overflow: hidden;
 
@@ -134,7 +135,7 @@ body {
             }
 
             .fieldLine {
-                left:50%;
+                left: 50%;
                 transform: translateX(-50%);
                 height: 100%;
                 border: 5px dashed rgb(70, 70, 70);
@@ -154,7 +155,7 @@ body {
             }
 
             .rightBar {
-                right: 20px
+                right: 20px;
             }
 
             .ball {
@@ -166,7 +167,6 @@ body {
                 width: 24px;
                 aspect-ratio: 1/1;
                 background-color: white;
-                box-shadow: 0 0 30px white;
                 border-radius: 4px;
             }
         }

@@ -49,6 +49,7 @@ const configureGame = (userSelection, gameObject, gameEls) => {
     gameObject.fieldDim = { "x": gameEls.field.offsetWidth, "y": gameEls.field.offsetHeight }
     gameObject.fieldBar = 50
     gameObject.barSteps = 8
+    gameObject.gameBar = document.querySelector(`#${userSelection === "left" ? "right" : "left"}Bar`)
 }
 
 const gameCountDown = async (time) => {
@@ -79,16 +80,10 @@ const initGame = async (game) => {
         cancel: false
     }
 
-    getFrameInfo(frame)
+    getFrameInfo(frame, game)
     activeBars(game)
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    frame.pause = true
-    console.log(frame.pause)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    frame.pause = false
-    console.log(frame.pause)
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 3000))
     frame.cancel = true
 }
 
@@ -108,17 +103,25 @@ const moveBar = (direction, game) => {
 }
 
 
-const getFrameInfo = async (frame) => {
+const getFrameInfo = async (frame, game) => {
     while (!frame.cancel) {
         while (frame.pause) {
             await new Promise(resolve => requestAnimationFrame(resolve))
             if (frame.cancel) return
         }
         /* logica */
-        frame.test = "1"
-        console.log(frame.test, frame.pause)
+        frame.barsLimits = getBarLimits(game)
+        console.log(frame.barsLimits)
         await new Promise(requestAnimationFrame)
     }
+}
+
+const getBarLimits = (game) => {
+    const userBarTop = game.userBar.offsetTop
+    const userBarHeight = game.userBar.offsetHeight
+    const gameBarTop = game.gameBar.offsetTop
+    const gameBarHeight = game.gameBar.offsetHeight
+    return {user: {start: userBarTop, end: userBarTop + userBarHeight}, game: {start: gameBarTop, end: gameBarTop + gameBarHeight}}
 }
 
 /* init */

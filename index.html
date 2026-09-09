@@ -33,20 +33,19 @@
         </div>
 
         <div class="gameBox max relative centered">
-            <div id="gameField" class="gameField max relative">
+            <div id="gameField" class="gameField max relative centered">
                 <div id="leftBar" class="bar leftBar absolute invisible tempo300"></div>
                 <div id="rightBar" class="bar rightBar absolute invisible tempo300"></div>
                 <div id="fieldLine" class="fieldLine absolute invisible tempo300"></div>
-                <div id="ball" class="ball absolute invisible tempo300"><element-3d></element-3d></div>
+                <div id="ball" class="ball absolute invisible tempo300"></div>
+                <!--  -->
+                <div id="selectionBox" class="selectionBox selectionBox_contracted absolute hidden invisible tempo600">
+                    <div id="selectorLeft" class="sideSelector selectorLeft gameText centered">LEFT</div>
+                    <div id="selectorRight" class="sideSelector selectorRight gameText centered">RIGHT</div>
+                </div>
+                <div id="countDownBox" class="countDownBox centered absolute hidden"></div>
             </div>
-
-            <div id="selectionBox" class="selectionBox selectionBox_contracted absolute hidden invisible tempo600">
-                <div id="selectorLeft" class="sideSelector selectorLeft gameText centered">LEFT</div>
-                <div id="selectorRight" class="sideSelector selectorRight gameText centered">RIGHT</div>
-            </div>
-
-            <div id="countDownBox" class="countDownBox centered absolute hidden"></div>
-
+            <div class="gameBalanceBox"></div>
         </div>
     </div>
 

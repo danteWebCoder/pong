@@ -169,62 +169,68 @@ body {
                 background-color: white;
                 border-radius: 4px;
             }
-        }
 
-        .selectionBox {
-            top: calc(50% - 50px);
-            display: flex;
-            justify-content: space-between;
-            width: 50%;
-            height: 100px;
+            .selectionBox {
+                top: calc(50% - 50px);
+                display: flex;
+                justify-content: space-between;
+                width: 50%;
+                height: 100px;
 
-            .sideSelector {
-                z-index: 99;
-                width: 200px;
-                height: 100%;
-                background-color: var(--black);
-                cursor: pointer;
-                transition: 100ms;
+                .sideSelector {
+                    z-index: 99;
+                    width: 200px;
+                    height: 100%;
+                    background-color: var(--black);
+                    cursor: pointer;
+                    transition: 100ms;
 
-                &:hover {
-                    color: white;
-                    border: 3px solid white;
+                    &:hover {
+                        color: white;
+                        border: 3px solid white;
+                    }
+                }
+
+                .selectorLeft:hover {
+                    box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
+                }
+
+                .selectorRight:hover {
+                    box-shadow: 0 0 40px tomato, inset 0 0 40px tomato;
                 }
             }
 
-            .selectorLeft:hover {
-                box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
+            .selectionBox_contracted {
+                width: 400px;
             }
 
-            .selectorRight:hover {
-                box-shadow: 0 0 40px tomato, inset 0 0 40px tomato;
+            .selectionBox_expanded {
+                width: 50%;
+            }
+
+            .countDownBox {
+                top: calc(50% - 200px);
+                width: 400px;
+                height: 400px;
+
+                .number {
+                    color: white;
+                    font-size: 0;
+                    font-family: "Audiowide";
+                    transition: 1000ms;
+                }
+
+                .number_in {
+                    font-size: 200px;
+                    opacity: 0;
+                }
             }
         }
 
-        .selectionBox_contracted {
-            width: 400px;
-        }
-
-        .selectionBox_expanded {
-            width: 50%;
-        }
-
-        .countDownBox {
-            top: calc(50% - 200px);
-            width: 400px;
-            height: 400px;
-
-            .number {
-                color: white;
-                font-size: 0;
-                font-family: "Audiowide";
-                transition: 1000ms;
-            }
-
-            .number_in {
-                font-size: 200px;
-                opacity: 0;
-            }
+        .gameBalanceBox {
+            width: 200px;
+            height: 100%;
+            border: 1px solid red;
         }
     }
 }

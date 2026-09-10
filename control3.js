@@ -1,8 +1,8 @@
 import * as HELPER from "./helpers.js"
 
 /* new game */
-const newGame = async (gameObject, gameEls) => {
-    await changeSelectionDisplay(true)
+const newGame = async (gameObject, gameEls, newButton) => {
+    await changeSelectionDisplay(true, newButton)
     const userSelection = await waitForSelection()
     configureGame(userSelection, gameObject, gameEls)
 
@@ -10,12 +10,15 @@ const newGame = async (gameObject, gameEls) => {
     await showGameElements(gameEls)
 }
 
-const changeSelectionDisplay = async (open) => {
+const changeSelectionDisplay = async (open, newButton) => {
     const selectionBox = document.querySelector("#selectionBox")
     const boxTempo = HELPER.getTime(selectionBox)
+    const buttonTempo = HELPER.getTime(newButton)
     if (open) {
-        HELPER.setRootVar("--selectionBoxDisplay", "flex")
-        await HELPER.sleep(100)
+        newButton.classList.add("invisible")
+        await HELPER.sleep(buttonTempo)
+        selectionBox.classList.remove("hidden")
+        await HELPER.sleepFrame(10)
         selectionBox.classList.remove("invisible", "selectionBox_contracted")
         selectionBox.classList.add("selectionBox_expanded")
         await HELPER.sleep(boxTempo)
@@ -121,7 +124,7 @@ const getBarLimits = (game) => {
     const userBarHeight = game.userBar.offsetHeight
     const gameBarTop = game.gameBar.offsetTop
     const gameBarHeight = game.gameBar.offsetHeight
-    return {user: {start: userBarTop, end: userBarTop + userBarHeight}, game: {start: gameBarTop, end: gameBarTop + gameBarHeight}}
+    return { user: { start: userBarTop, end: userBarTop + userBarHeight }, game: { start: gameBarTop, end: gameBarTop + gameBarHeight } }
 }
 
 /* init */
@@ -138,7 +141,7 @@ const init = async () => {
     const game = {}
 
     newButton.addEventListener("click", async () => {
-        await newGame(game, gameEls)
+        await newGame(game, gameEls, newButton)
         initGame(game)
         console.log(game)
     })

@@ -42,7 +42,7 @@
                     background-size: 4px 4px;
                     overflow: hidden;
 
-                    .topBox {
+                    .topBar {
                         top: 0;
                         display: flex;
                         width: 95%;
@@ -125,17 +125,10 @@
                         width: 50%;
                         height: 100px;
 
-                        border: 1px solid red;
-
                         .sideSelector {
                             background-color: var(--black);
                             cursor: pointer;
                             transition: 100ms;
-
-                            &:hover {
-                                color: white;
-                                border: 3px solid white;
-                            }
                         }
                     }
 
@@ -144,7 +137,7 @@
                     }
 
                     .selectionBox_expanded {
-                        width: 500px;
+                        width: 600px;
                     }
 
                     .countDownBox {
@@ -175,7 +168,7 @@
         }
     }
 
-    .buttomBox {
+    .buttonBox {
         width: 200px;
         height: 100px;
         border: 2px solid rgba(255, 255, 255, 0.2);
@@ -191,42 +184,52 @@
             content: attr(data-text);
             font-family: "Orbitron";
             font-weight: bolder;
-            font-size: 26px;
+            font-size: 22px;
             letter-spacing: 4px;
             color: var(--whiteMedium);
             background-color: var(--black);
             outline: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            cursor: pointer;
             transition: 200ms;
         }
+    }
 
-        &:hover::after {
-            width: 125px;
-            height: 125px;
-            color: var(--white);
-            border: 3px solid white;
-            border-radius: 50%;
-            box-shadow:
-                0 0 10px var(--enphasis2),
-                0 0 20px var(--enphasis2),
-                0 0 10px var(--enphasis2),
-                inset 0 0 20px var(--enphasis2);
+    .buttonBox_active {
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+            &::after {
+                width: 125px;
+                height: 125px;
+                color: var(--white);
+                border: 3px solid white;
+                border-radius: 50%;
+            }
+        }
+
+        &:hover {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+
+            &::after {
+                box-shadow:
+                    0 0 10px var(--glow),
+                    0 0 20px var(--glow),
+                    0 0 60px var(--glow),
+                    inset 0 0 20px var(--glow);
+            }
         }
 
         &:active::after {
-            color: var(--white);
-            border: 2px solid white;
             box-shadow:
-                0 0 10px white,
-                0 0 20px white,
-                0 0 10px white,
-                inset 0 0 20px white;
+                0 0 10px var(--glow),
+                0 0 20px var(--glow),
+                0 0 60px var(--glow),
+                0 0 80px var(--glow),
+                inset 0 0 20px var(--glow);
             transition: none;
         }
-
     }
-
 
     .max {
         width: 100%;

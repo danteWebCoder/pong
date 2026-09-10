@@ -20,7 +20,7 @@
         <div class="gameBox max relative rowSpace">
             <div id="gameField" class="gameField relative centered">
 
-                <div class="topBox rowSpace absolute invisible">
+                <div id="topBar" class="topBar rowSpace absolute invisible">
                     <div class="countersBox rowSpace">
                         <div class="sideCounter rowSpace">
                             <ul class="itemsBox"></ul>
@@ -39,12 +39,12 @@
                 <div id="ball" class="ball absolute invisible tempo300"></div>
                 <!--  -->
                 <div id="selectionBox" class="selectionBox selectionBox_contracted rowSpace tempo600 invisible hidden">
-                    <div class="buttomBox centered" data-text="LEFT"></div>
-                    <div class="buttomBox centered" data-text="RIGHT"></div>
+                    <div class="sideSelector buttonBox centered" data-text="LEFT" style="--glow: var(--enphasis1)"></div>
+                    <div class="sideSelector buttonBox centered" data-text="RIGHT" style="--glow: var(--enphasis1)"></div>
                 </div>
                 <div id="countDownBox" class="countDownBox centered absolute hidden"></div>
 
-                <div id="newGame" class="buttomBox centered absolute tempo300" data-text="NEW"></div>
+                <div id="newGame" class="buttonBox buttonBox_active centered absolute tempo300" data-text="NEW" style="--glow: var(--enphasis2)"></div>
 
 
             </div>

@@ -5,26 +5,32 @@ const newGame = async (gameObject, gameEls, newButton) => {
     await changeSelectionDisplay(true, newButton)
     const userSelection = await waitForSelection()
     configureGame(userSelection, gameObject, gameEls)
-
+    await changeSelectionDisplay(false, newButton)
     await gameCountDown(3)
     await showGameElements(gameEls)
 }
 
-const changeSelectionDisplay = async (open, newButton) => {
+const changeSelectionDisplay = async (open, newButton = null) => {
     const selectionBox = document.querySelector("#selectionBox")
     const boxTempo = HELPER.getTime(selectionBox)
     const buttonTempo = HELPER.getTime(newButton)
+
     if (open) {
+        newButton.classList.remove("buttonBox_active")
         newButton.classList.add("invisible")
         await HELPER.sleep(buttonTempo)
+        newButton.classList.add("hidden")
         selectionBox.classList.remove("hidden")
-        await HELPER.sleepFrame(10)
-        selectionBox.classList.remove("invisible", "selectionBox_contracted")
+        await HELPER.sleepFrame(5)
+        selectionBox.classList.remove("invisible")
+        selectionBox.classList.replace("selectionBox_contracted", "selectionBox_expanded")
         selectionBox.classList.add("selectionBox_expanded")
         await HELPER.sleep(boxTempo)
+        selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.add("buttonBox_active"))
     } else {
-        selectionBox.classList.remove("selectionBox_expanded")
-        selectionBox.classList.add("invisible", "selectionBox_contracted")
+        selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.remove("buttonBox_active"))
+        selectionBox.classList.add("invisible")
+        selectionBox.classList.replace("selectionBox_expanded", "selectionBox_contracted")
         await HELPER.sleep(boxTempo)
         selectionBox.classList.add("hidden")
     }
@@ -37,8 +43,8 @@ const waitForSelection = async () => {
         const { signal } = controller
         sideSelectors.forEach(item => {
             item.addEventListener("click", async (e) => {
-                await loadSelectionBox(false)
-                controller.abort()
+/*                 await loadSelectionBox(false)
+ */                controller.abort()
                 resolve(e.target.id === "selectorLeft" ? "left" : "right")
             }, { signal })
         })
@@ -131,11 +137,12 @@ const getBarLimits = (game) => {
 const init = async () => {
     const newButton = document.getElementById("newGame")
     const gameEls = {
+        field: document.querySelector("#gameField"),
+        topBar: document.querySelector("#topBar"),
         ball: document.querySelector("#ball"),
         barLeft: document.querySelector("#leftBar"),
         barRight: document.querySelector("#rightBar"),
-        line: document.querySelector("#fieldLine"),
-        field: document.querySelector("#gameField")
+        line: document.querySelector("#fieldLine")
     }
 
     const game = {}

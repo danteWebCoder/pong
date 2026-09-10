@@ -15,3 +15,8 @@ export const addTag = (box, tag, classes) => {
 export const setRootVar = (varName, value) => {
     document.documentElement.style.setProperty(varName, value)
 }
+
+export const setElementProp = (element, prop, value) => {
+    element.style.setProperty(prop, value)
+}
+

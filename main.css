@@ -12,8 +12,6 @@
     --black: rgb(30, 30, 30);
     --enphasis1: aquamarine;
     --enphasis2: rgb(235, 57, 57);
-
-    --selectionBoxDisplay: none;
 }
 
 body {
@@ -118,7 +116,7 @@ body {
 
                 .selectionBox {
                     top: calc(50% - 50px);
-                    display: var(--selectionBoxDisplay);
+                    display: none;
                     justify-content: space-between;
                     width: 50%;
                     height: fit-content;

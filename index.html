@@ -20,7 +20,7 @@
         <div class="gameBox max relative rowSpace">
             <div id="gameField" class="gameField relative centered">
 
-                <div class="topBox rowSpace absolute">
+                <div class="topBox rowSpace absolute invisible">
                     <div class="countersBox rowSpace">
                         <div class="sideCounter rowSpace">
                             <ul class="itemsBox"></ul>
@@ -33,19 +33,22 @@
                     </div>
                 </div>
 
-                <div id="new" class="buttonNew absolute centered tempo200 active">new</div>
-
-
                 <div id="leftBar" class="bar leftBar absolute invisible tempo300"></div>
                 <div id="rightBar" class="bar rightBar absolute invisible tempo300"></div>
                 <div id="fieldLine" class="fieldLine absolute invisible tempo300"></div>
                 <div id="ball" class="ball absolute invisible tempo300"></div>
                 <!--  -->
-                <div id="selectionBox" class="selectionBox selectionBox_contracted absolute hidden invisible tempo600">
-                    <div id="selectorLeft" class="sideSelector selectorLeft gameText centered">LEFT</div>
-                    <div id="selectorRight" class="sideSelector selectorRight gameText centered">RIGHT</div>
+                <div id="selectionBox" class="selectionBox selectionBox_contracted absolute tempo600">
+                    <div id="selectorLeft" class="sideSelector selectorLeft gameButton centered">LEFT</div>
+                    <div id="selectorRight" class="sideSelector selectorRight gameButton centered">RIGHT</div>
                 </div>
                 <div id="countDownBox" class="countDownBox centered absolute hidden"></div>
+
+                <div class="buttomBox centered absolute" data-text="NEW">
+<!--                     <span id="new" class="gameButton absolute centered tempo200">NEW</span>
+ -->                </div>
+
+
             </div>
             <div class="gameBalanceBox"></div>
         </div>

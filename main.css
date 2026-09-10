@@ -22,62 +22,67 @@ body {
 
     .gameContainer {
 
-        .topBox {
-            display: flex;
-            width: 100%;
-            height: 100px;
+        .gameBox {
+            border: 2px solid grey;
+            border-radius: 16px;
+            padding: 20px;
 
-            .countersBox {
-                width: 900px;
+            .gameField {
+                width: calc(100% - 240px);
                 height: 100%;
+                box-shadow: inset 10px 10px 100px black;
+                border: 2px solid gray;
+                border-radius: 12px;
+                background-image: radial-gradient(circle, rgba(105, 105, 105, 0.25) 1px, transparent 1px);
+                background-size: 4px 4px;
+                overflow: hidden;
 
-                .lineSeparator {
-                    width: 8px;
-                    height: 50%;
-                    margin: 0 6%;
-                    background-color: var(--whiteMedium);
-                }
-
-                .cBox {
+                .topBox {
+                    top: 0;
                     display: flex;
-                    align-items: center;
+                    width: 95%;
+                    height: 100px;
 
-                    .counter {
-                        display: flex;
-                        width: 200px;
-                        height: 100%;
-                        font-family: "Audiowide";
-                        font-Size: 80px;
-                        font-weight: bolder;
-                        color: var(--whiteMedium);
-                    }
+                    .countersBox {
+                        width: 100%;
+                        height: 100px;
+                        opacity: 0.3;
 
-                    &:nth-child(1 of &) {
-                        justify-content: flex-end;
 
-                        .counter {
-                            justify-content: flex-end;
+                        .sideCounter {
+                            width: calc(50% - 20px);
+                            display: flex;
+                            align-items: center;
+                            border: 1px solid blue;
+
+                            .itemsBox {
+                                width: calc(100% - 180px);
+                                height: 50%;
+                                border: 1px solid green;
+                            }
+
+                            .counter {
+                                width: 150px;
+                                height: 100%;
+                                font-family: "Audiowide";
+                                font-Size: 80px;
+                                font-weight: bolder;
+                                color: var(--whiteMedium);
+                                border: 1px solid red;
+                            }
+
+                            &:nth-child(1 of &) .counter {
+                                text-align: right;
+                            }   
                         }
                     }
-
-                    &:nth-child(2 of &) {
-                        justify-content: flex-start;
-                    }
                 }
-            }
 
-            .buttonsBox {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: auto;
-                height: 100%;
-
-                .button {
+                .buttonNew {
                     width: fit-content;
                     height: 40px;
                     padding: 0 14px;
-                    border: 2px solid rgb(58, 58, 58);
+                    border: 2px solid var(--whiteLight);
                     border-radius: 8px;
                     color: var(--whiteLight);
                     font-family: "Orbitron";
@@ -111,126 +116,105 @@ body {
                             inset 0 0 20px white;
                     }
                 }
-            }
-        }
-    }
 
-    .gameBox {
-        border: 2px solid grey;
-        border-radius: 16px;
-        padding: 20px;
-
-        .gameField {
-            box-shadow: inset 10px 10px 100px black;
-            border: 2px solid gray;
-            border-radius: 12px;
-            background-image: radial-gradient(circle, rgba(105, 105, 105, 0.25) 1px, transparent 1px);
-            background-size: 4px 4px;
-            overflow: hidden;
-
-            .side {
-                width: calc(50% - 6px);
-                height: 100%;
-                opacity: 0.1;
-            }
-
-            .fieldLine {
-                left: 50%;
-                transform: translateX(-50%);
-                height: 100%;
-                border: 5px dashed rgb(70, 70, 70);
-            }
-
-            .bar {
-                top: calc(50% - 50px);
-                width: 20px;
-                height: 100px;
-                border: 3px solid white;
-                border-radius: 4px;
-                background-color: rgba(255, 255, 255, 0.4);
-            }
-
-            .leftBar {
-                left: 20px;
-            }
-
-            .rightBar {
-                right: 20px;
-            }
-
-            .ball {
-                transform: translate(-50%, -50%);
-                /* own centered */
-                top: 50%;
-                left: 50%;
-
-                width: 24px;
-                aspect-ratio: 1/1;
-                background-color: white;
-                border-radius: 4px;
-            }
-
-            .selectionBox {
-                top: calc(50% - 50px);
-                display: flex;
-                justify-content: space-between;
-                width: 50%;
-                height: 100px;
-
-                .sideSelector {
-                    z-index: 99;
-                    width: 200px;
+                .fieldLine {
+                    left: 50%;
+                    transform: translateX(-50%);
                     height: 100%;
-                    background-color: var(--black);
-                    cursor: pointer;
-                    transition: 100ms;
+                    border: 5px dashed rgb(70, 70, 70);
+                }
 
-                    &:hover {
-                        color: white;
-                        border: 3px solid white;
+                .bar {
+                    top: calc(50% - 50px);
+                    width: 20px;
+                    height: 100px;
+                    border: 3px solid white;
+                    border-radius: 4px;
+                    background-color: rgba(255, 255, 255, 0.4);
+                }
+
+                .leftBar {
+                    left: 20px;
+                }
+
+                .rightBar {
+                    right: 20px;
+                }
+
+                .ball {
+                    transform: translate(-50%, -50%);
+                    /* own centered */
+                    top: 50%;
+                    left: 50%;
+
+                    width: 24px;
+                    aspect-ratio: 1/1;
+                    background-color: white;
+                    border-radius: 4px;
+                }
+
+                .selectionBox {
+                    top: calc(50% - 50px);
+                    display: flex;
+                    justify-content: space-between;
+                    width: 50%;
+                    height: 100px;
+
+                    .sideSelector {
+                        z-index: 99;
+                        width: 200px;
+                        height: 100%;
+                        background-color: var(--black);
+                        cursor: pointer;
+                        transition: 100ms;
+
+                        &:hover {
+                            color: white;
+                            border: 3px solid white;
+                        }
+                    }
+
+                    .selectorLeft:hover {
+                        box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
+                    }
+
+                    .selectorRight:hover {
+                        box-shadow: 0 0 40px tomato, inset 0 0 40px tomato;
                     }
                 }
 
-                .selectorLeft:hover {
-                    box-shadow: 0 0 40px aqua, inset 0 0 40px aqua;
+                .selectionBox_contracted {
+                    width: 400px;
                 }
 
-                .selectorRight:hover {
-                    box-shadow: 0 0 40px tomato, inset 0 0 40px tomato;
+                .selectionBox_expanded {
+                    width: 500px;
+                }
+
+                .countDownBox {
+                    top: calc(50% - 200px);
+                    width: 400px;
+                    height: 400px;
+
+                    .number {
+                        color: white;
+                        font-size: 0;
+                        font-family: "Audiowide";
+                        transition: 1000ms;
+                    }
+
+                    .number_in {
+                        font-size: 200px;
+                        opacity: 0;
+                    }
                 }
             }
 
-            .selectionBox_contracted {
-                width: 400px;
+            .gameBalanceBox {
+                width: 200px;
+                height: 100%;
+                border: 1px solid red;
             }
-
-            .selectionBox_expanded {
-                width: 50%;
-            }
-
-            .countDownBox {
-                top: calc(50% - 200px);
-                width: 400px;
-                height: 400px;
-
-                .number {
-                    color: white;
-                    font-size: 0;
-                    font-family: "Audiowide";
-                    transition: 1000ms;
-                }
-
-                .number_in {
-                    font-size: 200px;
-                    opacity: 0;
-                }
-            }
-        }
-
-        .gameBalanceBox {
-            width: 200px;
-            height: 100%;
-            border: 1px solid red;
         }
     }
 }
@@ -268,6 +252,11 @@ body {
 .rowAlign {
     display: flex;
     align-items: center;
+}
+
+.rowJustifyRight {
+    display: flex;
+    justify-content: right;
 }
 
 .hidden {

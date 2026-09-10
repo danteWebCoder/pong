@@ -16,24 +16,26 @@
 
 <body class="centered">
     <div class="gameContainer max columnCentered">
-        <div class="topBox rowSpace">
-            <div class="countersBox rowAlign">
-                <div class="cBox max">
-                    <span id="counterLeft" class="counter">0</span>
-                </div>
-                <div class="lineSeparator"></div>
-                <div class="cBox max">
-                    <span id="counterRight" class="counter">0</span>
-                </div>
-            </div>
-            <div class="buttonsBox">
-                <div id="new" class="button centered tempo200 active">new</div>
-            </div>
 
-        </div>
+        <div class="gameBox max relative rowSpace">
+            <div id="gameField" class="gameField relative centered">
 
-        <div class="gameBox max relative centered">
-            <div id="gameField" class="gameField max relative centered">
+                <div class="topBox rowSpace absolute">
+                    <div class="countersBox rowSpace">
+                        <div class="sideCounter rowSpace">
+                            <ul class="itemsBox"></ul>
+                            <span id="counterLeft" class="counter counterLeft">0</span>
+                        </div>
+                        <div class="sideCounter rowSpace">
+                            <span id="counterRight" class="counter counterRight">0</span>
+                            <ul class="itemsBox"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="new" class="buttonNew absolute centered tempo200 active">new</div>
+
+
                 <div id="leftBar" class="bar leftBar absolute invisible tempo300"></div>
                 <div id="rightBar" class="bar rightBar absolute invisible tempo300"></div>
                 <div id="fieldLine" class="fieldLine absolute invisible tempo300"></div>

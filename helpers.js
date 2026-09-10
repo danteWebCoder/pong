@@ -20,3 +20,6 @@ export const setElementProp = (element, prop, value) => {
     element.style.setProperty(prop, value)
 }
 
+export const getElementProp = (element, prop) => {
+    return getComputedStyle(element).getPropertyValue(prop).trim()
+}

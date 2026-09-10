@@ -11,3 +11,7 @@ export const addTag = (box, tag, classes) => {
     newTag.className = classes
     return box.appendChild(newTag)
 }
+
+export const setRootVar = (varName, value) => {
+    document.documentElement.style.setProperty(varName, value)
+}

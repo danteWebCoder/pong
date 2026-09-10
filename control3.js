@@ -2,7 +2,7 @@ import * as HELPER from "./helpers.js"
 
 /* new game */
 const newGame = async (gameObject, gameEls) => {
-    await loadSelectionBox(true)
+    await changeSelectionDisplay(true)
     const userSelection = await waitForSelection()
     configureGame(userSelection, gameObject, gameEls)
 
@@ -10,11 +10,11 @@ const newGame = async (gameObject, gameEls) => {
     await showGameElements(gameEls)
 }
 
-const loadSelectionBox = async (open) => {
+const changeSelectionDisplay = async (open) => {
     const selectionBox = document.querySelector("#selectionBox")
     const boxTempo = HELPER.getTime(selectionBox)
     if (open) {
-        selectionBox.classList.remove("hidden")
+        HELPER.setRootVar("--selectionBoxDisplay", "flex")
         await HELPER.sleep(100)
         selectionBox.classList.remove("invisible", "selectionBox_contracted")
         selectionBox.classList.add("selectionBox_expanded")
@@ -126,7 +126,7 @@ const getBarLimits = (game) => {
 
 /* init */
 const init = async () => {
-    const newButton = document.getElementById("new")
+    const newButton = document.getElementById("newGame")
     const gameEls = {
         ball: document.querySelector("#ball"),
         barLeft: document.querySelector("#leftBar"),

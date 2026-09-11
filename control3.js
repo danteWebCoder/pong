@@ -43,8 +43,7 @@ const waitForSelection = async () => {
         const { signal } = controller
         sideSelectors.forEach(item => {
             item.addEventListener("click", async (e) => {
-/*                 await loadSelectionBox(false)
- */                controller.abort()
+                controller.abort()
                 resolve(e.target.id === "selectorLeft" ? "left" : "right")
             }, { signal })
         })
@@ -77,8 +76,14 @@ const gameCountDown = async (time) => {
 
 const showGameElements = async (gameEls) => {
     const tempo = HELPER.getTime(gameEls.ball)
-    Object.values(gameEls).forEach(item => item.classList.remove("invisible"))
-    await HELPER.sleep(tempo)
+    gameEls.barLeft.classList.remove("invisible")
+    gameEls.barRight.classList.remove("invisible")
+    await HELPER.sleep(tempo * 1.4)
+    gameEls.line.classList.remove("invisible")
+    await HELPER.sleep(tempo * 1.4)
+    gameEls.topBar.classList.replace("topBar_topNegative", "topBar_top")
+    await HELPER.sleep(tempo * 1.4)
+    gameEls.ball.classList.remove("invisible")
 }
 
 /* game logic */
@@ -92,6 +97,7 @@ const initGame = async (game) => {
     getFrameInfo(frame, game)
     activeBars(game)
 
+    /* stop getFrameInfo at 3s */
     await new Promise(resolve => setTimeout(resolve, 3000))
     frame.cancel = true
 }
@@ -120,7 +126,7 @@ const getFrameInfo = async (frame, game) => {
         }
         /* logica */
         frame.barsLimits = getBarLimits(game)
-/*         console.log(frame.barsLimits)
+/*         console.log(frame)
  */        await new Promise(requestAnimationFrame)
     }
 }
@@ -144,6 +150,7 @@ const init = async () => {
         barRight: document.querySelector("#rightBar"),
         line: document.querySelector("#fieldLine")
     }
+    console.log(gameEls)
 
     const game = {}
 

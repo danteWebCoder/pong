@@ -120,8 +120,8 @@ const getFrameInfo = async (frame, game) => {
         }
         /* logica */
         frame.barsLimits = getBarLimits(game)
-        console.log(frame.barsLimits)
-        await new Promise(requestAnimationFrame)
+/*         console.log(frame.barsLimits)
+ */        await new Promise(requestAnimationFrame)
     }
 }
 

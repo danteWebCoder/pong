@@ -45,7 +45,7 @@
                     .topBar {
                         top: 0;
                         display: flex;
-                        width: 95%;
+                        width: 90%;
                         height: 100px;
 
                         .countersBox {

@@ -87,14 +87,14 @@ const showGameElements = async (gameEls) => {
 }
 
 /* game logic */
-const initGame = async (game) => {
+const initGame = async (game, gameEls) => {
 
     const frame = {
         pause: false,
         cancel: false
     }
 
-    getFrameInfo(frame, game)
+    getFrameInfo(frame, game, gameEls)
     activeBars(game)
 
     /* stop getFrameInfo at 3s */
@@ -118,7 +118,7 @@ const moveBar = (direction, game) => {
 }
 
 
-const getFrameInfo = async (frame, game) => {
+const getFrameInfo = async (frame, game, gameEls) => {
     while (!frame.cancel) {
         while (frame.pause) {
             await new Promise(resolve => requestAnimationFrame(resolve))
@@ -126,8 +126,10 @@ const getFrameInfo = async (frame, game) => {
         }
         /* logica */
         frame.barsLimits = getBarLimits(game)
-/*         console.log(frame)
- */        await new Promise(requestAnimationFrame)
+        frame.ballPos = getBallPos(gameEls, game)
+        console.log(frame)
+        console.log(game.fieldDim.x, game.fieldDim.y)
+        await new Promise(requestAnimationFrame)
     }
 }
 
@@ -136,7 +138,29 @@ const getBarLimits = (game) => {
     const userBarHeight = game.userBar.offsetHeight
     const gameBarTop = game.gameBar.offsetTop
     const gameBarHeight = game.gameBar.offsetHeight
-    return { user: { start: userBarTop, end: userBarTop + userBarHeight }, game: { start: gameBarTop, end: gameBarTop + gameBarHeight } }
+    return {
+        user: {
+            start: userBarTop,
+            end: userBarTop + userBarHeight
+        },
+        game: {
+            start: gameBarTop,
+            end: gameBarTop + gameBarHeight
+        }
+    }
+}
+
+const getBallPos = (gameEls, game) => {
+    const ballRect = gameEls.ball.getBoundingClientRect()
+    const fieldRect = gameEls.field.getBoundingClientRect()
+
+    const xPx = ballRect.left - fieldRect.left
+    const yPx = ballRect.top - fieldRect.top
+
+    return {
+        x: (xPx / game.fieldDim.x) * 100,
+        y: (yPx / game.fieldDim.y) * 100
+    }
 }
 
 /* init */
@@ -156,7 +180,7 @@ const init = async () => {
 
     newButton.addEventListener("click", async () => {
         await newGame(game, gameEls, newButton)
-        initGame(game)
+        initGame(game, gameEls)
         console.log(game)
     })
 }

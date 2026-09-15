@@ -1,38 +1,62 @@
 import * as HELPER from "./helpers.js"
 
-/* new game */
-const newGame = async (gameObject, gameEls, newButton) => {
-    await changeSelectionDisplay(true, newButton)
-    const userSelection = await waitForSelection()
-    configureGame(userSelection, gameObject, gameEls)
-    await changeSelectionDisplay(false, newButton)
-    await gameCountDown(3)
-    await showGameElements(gameEls)
+const CONFIG = {
+    barsSteps: 8
 }
 
-const changeSelectionDisplay = async (open, newButton = null) => {
-    const selectionBox = document.querySelector("#selectionBox")
-    const boxTempo = HELPER.getTime(selectionBox)
-    const buttonTempo = HELPER.getTime(newButton)
+const ITEM = {
+    field: document.querySelector("#gameField"),
+    topBar: document.querySelector("#topBar"),
+    bottomBar: document.querySelector("#bottomBar"),
+    ball: document.querySelector("#ball"),
+    barLeft: document.querySelector("#leftBar"),
+    barRight: document.querySelector("#rightBar"),
+    line: document.querySelector("#fieldLine"),
+    newButton: document.getElementById("newGame"),
+    selectionBox: document.querySelector("#selectionBox")
+}
+
+const INITIAL_FRAME = {
+    pause: false,
+    cancel: false,
+    fieldDim: { "x": null, "y": null },
+    barsLimits: {},
+    userBarPos: CONFIG.barsSteps / 2,
+    ballPos: null
+}
+
+/* new game */
+const newGame = async (ROUND) => {
+    await changeSelectionDisplay(true)
+    ROUND.userSelection = await waitForSelection()
+    configureRound(ROUND)
+    await changeSelectionDisplay(false)
+    await gameCountDown(3)
+    await showGameElements()
+}
+
+const changeSelectionDisplay = async (open) => {
+    const boxTempo = HELPER.getTime(ITEM.selectionBox)
+    const buttonTempo = HELPER.getTime(ITEM.newButton)
 
     if (open) {
-        newButton.classList.remove("buttonBox_active")
-        newButton.classList.add("invisible")
+        ITEM.newButton.classList.remove("buttonBox_active")
+        ITEM.newButton.classList.add("invisible")
         await HELPER.sleep(buttonTempo)
-        newButton.classList.add("hidden")
-        selectionBox.classList.remove("hidden")
+        ITEM.newButton.classList.add("hidden")
+        ITEM.selectionBox.classList.remove("hidden")
         await HELPER.sleepFrame(5)
-        selectionBox.classList.remove("invisible")
-        selectionBox.classList.replace("selectionBox_contracted", "selectionBox_expanded")
-        selectionBox.classList.add("selectionBox_expanded")
+        ITEM.selectionBox.classList.remove("invisible")
+        ITEM.selectionBox.classList.replace("selectionBox_contracted", "selectionBox_expanded")
+        ITEM.selectionBox.classList.add("selectionBox_expanded")
         await HELPER.sleep(boxTempo)
-        selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.add("buttonBox_active"))
+        ITEM.selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.add("buttonBox_active"))
     } else {
-        selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.remove("buttonBox_active"))
-        selectionBox.classList.add("invisible")
-        selectionBox.classList.replace("selectionBox_expanded", "selectionBox_contracted")
+        ITEM.selectionBox.querySelectorAll(".buttonBox").forEach(item => item.classList.remove("buttonBox_active"))
+        ITEM.selectionBox.classList.add("invisible")
+        ITEM.selectionBox.classList.replace("selectionBox_expanded", "selectionBox_contracted")
         await HELPER.sleep(boxTempo)
-        selectionBox.classList.add("hidden")
+        ITEM.selectionBox.classList.add("hidden")
     }
 }
 
@@ -50,14 +74,13 @@ const waitForSelection = async () => {
     })
 }
 
-const configureGame = (userSelection, gameObject, gameEls) => {
-    gameObject.userField = userSelection
-    gameObject.userBar = document.querySelector(`#${userSelection}Bar`)
-    gameObject.userBarPos = 4
-    gameObject.fieldDim = { "x": gameEls.field.offsetWidth, "y": gameEls.field.offsetHeight }
-    gameObject.fieldBar = 50
-    gameObject.barSteps = 8
-    gameObject.gameBar = document.querySelector(`#${userSelection === "left" ? "right" : "left"}Bar`)
+const configureRound = (ROUND) => {
+    ROUND.userField = ROUND.userSelection
+    ROUND.userBar = document.querySelector(`#${ROUND.userSelection}Bar`)
+    ROUND.userBarPos = 4
+    ROUND.fieldDim = { "x": ITEM.field.offsetWidth, "y": ITEM.field.offsetHeight }
+    ROUND.fieldBar = 50
+    ROUND.gameBar = document.querySelector(`#${ROUND.userSelection === "left" ? "right" : "left"}Bar`)
 }
 
 const gameCountDown = async (time) => {
@@ -74,70 +97,65 @@ const gameCountDown = async (time) => {
     }
 }
 
-const showGameElements = async (gameEls) => {
-    const tempo = HELPER.getTime(gameEls.ball)
-    gameEls.barLeft.classList.remove("invisible")
-    gameEls.barRight.classList.remove("invisible")
+const showGameElements = async () => {
+    const tempo = HELPER.getTime(ITEM.ball)
+    ITEM.barLeft.classList.remove("invisible")
+    ITEM.barRight.classList.remove("invisible")
     await HELPER.sleep(tempo * 1.4)
-    gameEls.line.classList.remove("invisible")
+    ITEM.line.classList.remove("invisible")
     await HELPER.sleep(tempo * 1.4)
-    gameEls.topBar.classList.replace("topBar_topNegative", "topBar_top")
+    ITEM.topBar.classList.replace("topBar_boxOut", "topBar_boxIn")
+    ITEM.bottomBar.classList.replace("bottomBar_boxOut", "bottomBar_boxIn")
     await HELPER.sleep(tempo * 1.4)
-    gameEls.ball.classList.remove("invisible")
+    ITEM.ball.classList.remove("invisible")
 }
 
 /* game logic */
-const initGame = async (game, gameEls) => {
-
-    const frame = {
-        pause: false,
-        cancel: false
-    }
-
-    getFrameInfo(frame, game, gameEls)
-    activeBars(game)
+const initGame = async (ROUND, FRAME, ITEM) => {
+    getFrameInfo(ROUND, FRAME)
+    /* reactive events */
+    activeBars(ROUND, FRAME)
+    getFieldDim(ITEM)
 
     /* stop getFrameInfo at 3s */
     await new Promise(resolve => setTimeout(resolve, 3000))
-    frame.cancel = true
+    FRAME.cancel = true
+    console.log(FRAME)
 }
 
-const activeBars = (game) => {
+const activeBars = (ROUND, FRAME) => {
     window.addEventListener("wheel", (e) => {
-        e.deltaY < 0 && moveBar("up", game)
-        e.deltaY > 0 && moveBar("down", game)
+        e.deltaY < 0 && moveBar("up", ROUND, FRAME)
+        e.deltaY > 0 && moveBar("down", ROUND, FRAME)
     })
 }
 
-const moveBar = (direction, game) => {
-    const barHeightPercent = (game.userBar.offsetHeight / game.fieldDim.y) * 100
-    const moveStep = (100 - barHeightPercent) / game.barSteps
-    if (direction === "up" && game.userBarPos > 0) game.userBarPos--
-    if (direction === "down" && game.userBarPos < game.barSteps) game.userBarPos++
-    game.userBar.style.top = `${moveStep * game.userBarPos}%`
+const moveBar = (direction, ROUND, FRAME) => {
+    const barHeightPercent = (ROUND.userBar.offsetHeight / FRAME.fieldDim.y) * 100
+    const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
+    if (direction === "up" && FRAME.userBarPos > 0) FRAME.userBarPos--
+    if (direction === "down" && FRAME.userBarPos < CONFIG.barsSteps) FRAME.userBarPos++
+    ROUND.userBar.style.top = `${moveStep * FRAME.userBarPos}%`
+    console.log(direction, `${moveStep * FRAME.userBarPos}%`, FRAME.userBarPos)
 }
 
-
-const getFrameInfo = async (frame, game, gameEls) => {
-    while (!frame.cancel) {
-        while (frame.pause) {
-            await new Promise(resolve => requestAnimationFrame(resolve))
-            if (frame.cancel) return
+const getFrameInfo = async (ROUND, FRAME) => {
+    while (!FRAME.cancel) {
+        while (FRAME.pause) {
+            await new Promise(resolve => requestAnimationgame.FRAME(resolve))
+            if (FRAME.cancel) return
         }
-        /* logica */
-        frame.barsLimits = getBarLimits(game)
-        frame.ballPos = getBallPos(gameEls, game)
-        console.log(frame)
-        console.log(game.fieldDim.x, game.fieldDim.y)
+        FRAME.barsLimits = getBarLimits(ROUND)
+        FRAME.ballPos = getBallPos(FRAME)
         await new Promise(requestAnimationFrame)
     }
 }
 
-const getBarLimits = (game) => {
-    const userBarTop = game.userBar.offsetTop
-    const userBarHeight = game.userBar.offsetHeight
-    const gameBarTop = game.gameBar.offsetTop
-    const gameBarHeight = game.gameBar.offsetHeight
+const getBarLimits = (ROUND) => {
+    const userBarTop = ROUND.userBar.offsetTop
+    const userBarHeight = ROUND.userBar.offsetHeight
+    const gameBarTop = ROUND.gameBar.offsetTop
+    const gameBarHeight = ROUND.gameBar.offsetHeight
     return {
         user: {
             start: userBarTop,
@@ -150,38 +168,44 @@ const getBarLimits = (game) => {
     }
 }
 
-const getBallPos = (gameEls, game) => {
-    const ballRect = gameEls.ball.getBoundingClientRect()
-    const fieldRect = gameEls.field.getBoundingClientRect()
+const getBallPos = (FRAME) => {
+    const ballRect = ITEM.ball.getBoundingClientRect()
+    const fieldRect = ITEM.field.getBoundingClientRect()
 
     const xPx = ballRect.left - fieldRect.left
     const yPx = ballRect.top - fieldRect.top
 
     return {
-        x: (xPx / game.fieldDim.x) * 100,
-        y: (yPx / game.fieldDim.y) * 100
+        x: (xPx / FRAME.fieldDim.x) * 100,
+        y: (yPx / FRAME.fieldDim.y) * 100
     }
+}
+
+const getFieldDim = (ITEM) => {
+    console.log(ITEM.field.offsetWidth, ITEM.field.offsetHeight)
 }
 
 /* init */
 const init = async () => {
-    const newButton = document.getElementById("newGame")
-    const gameEls = {
-        field: document.querySelector("#gameField"),
-        topBar: document.querySelector("#topBar"),
-        ball: document.querySelector("#ball"),
-        barLeft: document.querySelector("#leftBar"),
-        barRight: document.querySelector("#rightBar"),
-        line: document.querySelector("#fieldLine")
+    const ROUND = {
+        userSelection: null,
+        userField: null,
+        userBar: null
     }
-    console.log(gameEls)
 
-    const game = {}
+    const FRAME = {
+        pause: false,
+        cancel: false,
+        fieldDim: { "x": ITEM.field.offsetWidth, "y": ITEM.field.offsetHeight }, /* de funcion getFieldDim on resize */
+        barsLimits: {},
+        userBarPos: CONFIG.barsSteps / 2,
+        ballPos: 0 /* de funcion getBallPos */
+    }
 
-    newButton.addEventListener("click", async () => {
-        await newGame(game, gameEls, newButton)
-        initGame(game, gameEls)
-        console.log(game)
+    ITEM.newButton.addEventListener("click", async () => {
+        await newGame(ROUND)
+        initGame(ROUND, FRAME, ITEM)
+        console.log(ROUND, FRAME)
     })
 }
 

@@ -5,28 +5,26 @@ const CONFIG = {
 }
 
 const ITEM = {
-    field: document.querySelector("#gameField"),
+    field: document.querySelector("#field"),
     topBar: document.querySelector("#topBar"),
     bottomBar: document.querySelector("#bottomBar"),
     ball: document.querySelector("#ball"),
     barLeft: document.querySelector("#leftBar"),
     barRight: document.querySelector("#rightBar"),
     line: document.querySelector("#fieldLine"),
-    newButton: document.getElementById("newGame"),
-    selectionBox: document.querySelector("#selectionBox")
+    newButton: document.querySelector("#newGame"),
+    selectionBox: document.querySelector("#selectionBox"),
+    terminal: document.querySelector("#terminal")
 }
 
-const INITIAL_FRAME = {
-    pause: false,
-    cancel: false,
-    fieldDim: { "x": null, "y": null },
-    barsLimits: {},
-    userBarPos: CONFIG.barsSteps / 2,
-    ballPos: null
+const ROUND = {
+    userSelection: null,
+    userField: null,
+    userBar: null
 }
 
 /* new game */
-const newGame = async (ROUND) => {
+const newGame = async () => {
     await changeSelectionDisplay(true)
     ROUND.userSelection = await waitForSelection()
     configureRound(ROUND)
@@ -111,16 +109,35 @@ const showGameElements = async () => {
 }
 
 /* game logic */
-const initGame = async (ROUND, FRAME, ITEM) => {
-    getFrameInfo(ROUND, FRAME)
-    /* reactive events */
+const initGame = async () => {
+    const FRAME = {
+        pause: false,
+        cancel: false
+    }
+
+    /* prepare terminal */
+    prepareTerminal(FRAME)
+    /*     getFrameInfo(ROUND, FRAME)
+     */    /* reactive events */
     activeBars(ROUND, FRAME)
     getFieldDim(ITEM)
 
     /* stop getFrameInfo at 3s */
     await new Promise(resolve => setTimeout(resolve, 3000))
     FRAME.cancel = true
+}
+const prepareTerminal = (FRAME) => {
     console.log(FRAME)
+    Object.entries(FRAME).forEach(([key, value]) => {
+        if (typeof value === "object" && !Array.isArray(value) && !value) {
+            prepareTerminal(value)
+        } else {
+            const line = HELPER.addTag(ITEM.terminal, "div", "infoLine")
+            const keyName = HELPER.addTag(line, "span", "keyName")
+            keyName.textContent = key.toUpperCase()
+            const valueData = HELPER.addTag(line, "span", "valueData")
+        }
+    })
 }
 
 const activeBars = (ROUND, FRAME) => {
@@ -147,6 +164,7 @@ const getFrameInfo = async (ROUND, FRAME) => {
         }
         FRAME.barsLimits = getBarLimits(ROUND)
         FRAME.ballPos = getBallPos(FRAME)
+        drawTerminal(FRAME)
         await new Promise(requestAnimationFrame)
     }
 }
@@ -181,19 +199,16 @@ const getBallPos = (FRAME) => {
     }
 }
 
-const getFieldDim = (ITEM) => {
-    console.log(ITEM.field.offsetWidth, ITEM.field.offsetHeight)
+
+const getFieldDim = () => {
+    return { 'x': ITEM.field.offsetWidth, 'y': ITEM.field.offsetHeight }
 }
+
 
 /* init */
 const init = async () => {
-    const ROUND = {
-        userSelection: null,
-        userField: null,
-        userBar: null
-    }
 
-    const FRAME = {
+    const FRAME2 = {
         pause: false,
         cancel: false,
         fieldDim: { "x": ITEM.field.offsetWidth, "y": ITEM.field.offsetHeight }, /* de funcion getFieldDim on resize */
@@ -203,9 +218,8 @@ const init = async () => {
     }
 
     ITEM.newButton.addEventListener("click", async () => {
-        await newGame(ROUND)
-        initGame(ROUND, FRAME, ITEM)
-        console.log(ROUND, FRAME)
+        await newGame()
+        initGame()
     })
 }
 

@@ -192,25 +192,34 @@
                 }
 
                 .terminalInfoBox {
-                    width: 200px;
+                    width: 220px;
                     height: 100%;
-                    border: 1px solid red;
-                    padding: 20px;
+                    border: 2px solid grey;
+                    border-radius: 12px;
+                    padding: 15px;
 
                     .infoLine {
+                        display: flex;
                         width: 100%;
                         height: 20px;
-                        color: var(--whiteMedium);
+                        font-family: "Raleway";
+                        font-weight: bolder;
+                        font-size: 12px;
 
                         .keyName {
                             width: fit-content;
                             height: 100%;
                             margin-right: 20px;
+                            color: var(--whiteMedium);
                         }
 
                         .valueData {
-                            width: fit-content;
+                            flex: 1;
+                            display: flex;
+                            justify-content: flex-end;
+                            width: 100%;
                             height: 100%;
+                            color: var(--enphasis1);
                         }
                     }
                 }

@@ -136,6 +136,7 @@ const prepareTerminal = (FRAME) => {
             const keyName = HELPER.addTag(line, "span", "keyName")
             keyName.textContent = key.toUpperCase()
             const valueData = HELPER.addTag(line, "span", "valueData")
+            valueData.textContent = String(value).toUpperCase()
         }
     })
 }

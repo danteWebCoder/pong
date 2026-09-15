@@ -12,9 +12,10 @@ export const sleepFrame = async (frames) => {
     }
 }
 
-export const addTag = (box, tag, classes) => {
+export const addTag = (box, tag, classes = null, id = null) => {
     const newTag = document.createElement(tag)
-    newTag.className = classes
+    classes && (newTag.className = classes)
+    id && (newTag.id = id)
     return box.appendChild(newTag)
 }
 

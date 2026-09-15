@@ -72,7 +72,7 @@ const waitForSelection = async () => {
     })
 }
 
-const configureRound = (ROUND) => {
+const configureRound = () => {
     ROUND.userField = ROUND.userSelection
     ROUND.userBar = document.querySelector(`#${ROUND.userSelection}Bar`)
     ROUND.userBarPos = 4
@@ -127,7 +127,6 @@ const initGame = async () => {
     FRAME.cancel = true
 }
 const prepareTerminal = (FRAME) => {
-    console.log(FRAME)
     Object.entries(FRAME).forEach(([key, value]) => {
         if (typeof value === "object" && !Array.isArray(value) && !value) {
             prepareTerminal(value)
@@ -141,14 +140,14 @@ const prepareTerminal = (FRAME) => {
     })
 }
 
-const activeBars = (ROUND, FRAME) => {
+const activeBars = (FRAME) => {
     window.addEventListener("wheel", (e) => {
-        e.deltaY < 0 && moveBar("up", ROUND, FRAME)
-        e.deltaY > 0 && moveBar("down", ROUND, FRAME)
+        e.deltaY < 0 && moveBar("up", FRAME)
+        e.deltaY > 0 && moveBar("down", FRAME)
     })
 }
 
-const moveBar = (direction, ROUND, FRAME) => {
+const moveBar = (direction, FRAME) => {
     const barHeightPercent = (ROUND.userBar.offsetHeight / FRAME.fieldDim.y) * 100
     const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
     if (direction === "up" && FRAME.userBarPos > 0) FRAME.userBarPos--
@@ -157,7 +156,7 @@ const moveBar = (direction, ROUND, FRAME) => {
     console.log(direction, `${moveStep * FRAME.userBarPos}%`, FRAME.userBarPos)
 }
 
-const getFrameInfo = async (ROUND, FRAME) => {
+const getFrameInfo = async (FRAME) => {
     while (!FRAME.cancel) {
         while (FRAME.pause) {
             await new Promise(resolve => requestAnimationgame.FRAME(resolve))
@@ -170,7 +169,7 @@ const getFrameInfo = async (ROUND, FRAME) => {
     }
 }
 
-const getBarLimits = (ROUND) => {
+const getBarLimits = () => {
     const userBarTop = ROUND.userBar.offsetTop
     const userBarHeight = ROUND.userBar.offsetHeight
     const gameBarTop = ROUND.gameBar.offsetTop

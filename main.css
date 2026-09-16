@@ -7,6 +7,7 @@
         padding: 0;
         box-sizing: border-box;
         user-select: none;
+        list-style: none;
     }
 
     :root {
@@ -196,30 +197,41 @@
                     height: 100%;
                     border: 2px solid grey;
                     border-radius: 12px;
-                    padding: 15px;
+                    padding: 0 15px;
 
-                    .infoLine {
-                        display: flex;
+                    .terminalSection {
                         width: 100%;
-                        height: 20px;
+                        height: auto;
+                        margin-top: 20px;
                         font-family: "Raleway";
                         font-weight: bolder;
                         font-size: 12px;
+                        color: var(--whiteMedium);
 
-                        .keyName {
-                            width: fit-content;
-                            height: 100%;
-                            margin-right: 20px;
-                            color: var(--whiteMedium);
-                        }
-
-                        .valueData {
-                            flex: 1;
+                        .infoLine {
                             display: flex;
-                            justify-content: flex-end;
                             width: 100%;
-                            height: 100%;
-                            color: var(--enphasis1);
+                            height: 20px;
+
+                            &:nth-child(1 of &) {
+                                margin-top: 15px;
+                            }
+
+                            .keyName {
+                                width: fit-content;
+                                height: 100%;
+                                margin-right: 20px;
+                                color: var(--whiteMedium);
+                            }
+
+                            .valueData {
+                                flex: 1;
+                                display: flex;
+                                justify-content: flex-end;
+                                width: 100%;
+                                height: 100%;
+                                color: var(--enphasis1);
+                            }
                         }
                     }
                 }
@@ -307,6 +319,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
     }
 
     .columnCentered {

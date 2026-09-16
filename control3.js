@@ -9,8 +9,8 @@ const ITEM = {
     topBar: document.querySelector("#topBar"),
     bottomBar: document.querySelector("#bottomBar"),
     ball: document.querySelector("#ball"),
-    barLeft: document.querySelector("#leftBar"),
-    barRight: document.querySelector("#rightBar"),
+    bar_left: document.querySelector("#leftBar"),
+    bar_right: document.querySelector("#rightBar"),
     line: document.querySelector("#fieldLine"),
     newButton: document.querySelector("#newGame"),
     selectionBox: document.querySelector("#selectionBox"),
@@ -18,16 +18,23 @@ const ITEM = {
 }
 
 const ROUND = {
-    userSelection: null,
-    userField: null,
-    userBar: null
+    state: {
+        pause: false,
+        cancel: false,
+        fieldDim: null
+    },
+    user: {
+        selection: null,
+        bar: null, /* not visible */
+        barPos: null
+    }
 }
 
 /* new game */
 const newGame = async () => {
     await changeSelectionDisplay(true)
-    ROUND.userSelection = await waitForSelection()
-    configureRound(ROUND)
+    const selection = await waitForSelection()
+    configureRound(selection)
     await changeSelectionDisplay(false)
     await gameCountDown(3)
     await showGameElements()
@@ -72,13 +79,20 @@ const waitForSelection = async () => {
     })
 }
 
-const configureRound = () => {
-    ROUND.userField = ROUND.userSelection
-    ROUND.userBar = document.querySelector(`#${ROUND.userSelection}Bar`)
-    ROUND.userBarPos = 4
-    ROUND.fieldDim = { "x": ITEM.field.offsetWidth, "y": ITEM.field.offsetHeight }
-    ROUND.fieldBar = 50
-    ROUND.gameBar = document.querySelector(`#${ROUND.userSelection === "left" ? "right" : "left"}Bar`)
+const configureRound = (selection) => {
+    ROUND.state.fieldDim = getFieldDim()
+    ROUND.user.selection = selection
+    ROUND.user.barPos = CONFIG.barsSteps / 2
+    ROUND.user.bar = getBars().user
+/*     ROUND.user.barLimits = getBarLimits()
+ *//*     ROUND.fieldBar = 50
+ */}
+
+const getBars = () => {
+    return {
+        "user": ITEM[`bar_${ROUND.user.selection}`],
+        "game": ITEM[`bar_${ROUND.user.selection === "left" ? "right" : "left"}`]
+    }
 }
 
 const gameCountDown = async (time) => {
@@ -97,8 +111,8 @@ const gameCountDown = async (time) => {
 
 const showGameElements = async () => {
     const tempo = HELPER.getTime(ITEM.ball)
-    ITEM.barLeft.classList.remove("invisible")
-    ITEM.barRight.classList.remove("invisible")
+    ITEM.bar_left.classList.remove("invisible")
+    ITEM.bar_right.classList.remove("invisible")
     await HELPER.sleep(tempo * 1.4)
     ITEM.line.classList.remove("invisible")
     await HELPER.sleep(tempo * 1.4)
@@ -110,32 +124,44 @@ const showGameElements = async () => {
 
 /* game logic */
 const initGame = async () => {
-    const FRAME = {
-        pause: false,
-        cancel: false
-    }
 
     /* prepare terminal */
-    prepareTerminal(FRAME)
+    prepareTerminal(ROUND, ITEM.terminal)
     /*     getFrameInfo(ROUND, FRAME)
      */    /* reactive events */
-    activeBars(ROUND, FRAME)
-    getFieldDim(ITEM)
+    activeBars(ROUND)
 
     /* stop getFrameInfo at 3s */
     await new Promise(resolve => setTimeout(resolve, 3000))
-    FRAME.cancel = true
+    ROUND.state.cancel = true
 }
-const prepareTerminal = (FRAME) => {
-    Object.entries(FRAME).forEach(([key, value]) => {
-        if (typeof value === "object" && !Array.isArray(value) && !value) {
-            prepareTerminal(value)
-        } else {
-            const line = HELPER.addTag(ITEM.terminal, "div", "infoLine")
-            const keyName = HELPER.addTag(line, "span", "keyName")
-            keyName.textContent = key.toUpperCase()
-            const valueData = HELPER.addTag(line, "span", "valueData", key)
-            valueData.textContent = String(value).toUpperCase()
+
+const prepareTerminal = (obj, parent) => {
+    const noVisibleData = ["bar"] /* saltar estas keys */
+
+    const addSection = (key, value) => {
+        const section = HELPER.addTag(ITEM.terminal, "li", "terminalSection column")
+        section.textContent = key.toUpperCase()
+        prepareTerminal(value, section)
+    }
+
+    const addLine = (parent, key, value) => {
+        const line = HELPER.addTag(parent, "div", "infoLine")
+        const keyName = HELPER.addTag(line, "span", "keyName")
+        keyName.textContent = key.toUpperCase()
+        const valueData = HELPER.addTag(line, "span", "valueData", key)
+        valueData.textContent = String(value).toUpperCase()
+    }
+
+    Object.entries(obj).forEach(([key, value]) => {
+        if (!noVisibleData.includes(key)) {
+            if (typeof value === "object" && !Array.isArray(value) && value) {
+                if (parent === ITEM.terminal) {
+                    addSection(key, value)
+                }
+            } else {
+                addLine(parent, key, value)
+            }
         }
     })
 }
@@ -156,15 +182,15 @@ const moveBar = (direction, FRAME) => {
     console.log(direction, `${moveStep * FRAME.userBarPos}%`, FRAME.userBarPos)
 }
 
-const getFrameInfo = async (FRAME) => {
-    while (!FRAME.cancel) {
-        while (FRAME.pause) {
-            await new Promise(resolve => requestAnimationgame.FRAME(resolve))
-            if (FRAME.cancel) return
+const getFrameInfo = async () => {
+    while (!ROUND.state.cancel) {
+        while (ROUND.pause) {
+            await new Promise(resolve => requestAnimationgame.ROUND(resolve))
+            if (ROUND.cancel) return
         }
-        FRAME.barsLimits = getBarLimits(ROUND)
-        FRAME.ballPos = getBallPos(FRAME)
-        drawTerminal(FRAME)
+        ROUND.barsLimits = getBarLimits(ROUND)
+        ROUND.ballPos = getBallPos(ROUND)
+        drawTerminal(ROUND)
         await new Promise(requestAnimationFrame)
     }
 }

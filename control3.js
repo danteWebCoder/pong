@@ -26,13 +26,13 @@ const ROUND = {
     user: {
         selection: null,
         bar: null, /* not visible */
-        barPos: null,
+        barPos: CONFIG.barsSteps / 2,
         barLimits: null
     },
     game: {
         selection: null,
         bar: null, /* not visible */
-        barPos: null
+        barPos: CONFIG.barsSteps / 2
     }
 }
 
@@ -89,11 +89,13 @@ const configureRound = (selection) => {
     ROUND.state.fieldDim = getFieldDim()
     /* user */
     ROUND.user.selection = selection
-    ROUND.user.barPos = CONFIG.barsSteps / 2
     ROUND.user.bar = getBars().user
     ROUND.user.barLimits = getBarLimits().user
-/*     ROUND.fieldBar = 50
- */}
+    /* game */
+    ROUND.game.selection = selection === "left" ? "right" : "left"
+    ROUND.game.bar = getBars().game
+    ROUND.game.barLimits = getBarLimits().game
+}
 
 const getBars = () => {
     return {

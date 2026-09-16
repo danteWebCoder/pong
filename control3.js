@@ -21,12 +21,13 @@ const ROUND = {
     state: {
         pause: false,
         cancel: false,
-        fieldDim: null
+        fieldDim: { x: null, y: null }
     },
     user: {
         selection: null,
         bar: null, /* not visible */
-        barPos: null
+        barPos: null,
+        barLimits: null
     },
     game: {
         selection: null,
@@ -86,11 +87,12 @@ const waitForSelection = async () => {
 
 const configureRound = (selection) => {
     ROUND.state.fieldDim = getFieldDim()
+    /* user */
     ROUND.user.selection = selection
     ROUND.user.barPos = CONFIG.barsSteps / 2
     ROUND.user.bar = getBars().user
-/*     ROUND.user.barLimits = getBarLimits()
- *//*     ROUND.fieldBar = 50
+    ROUND.user.barLimits = getBarLimits().user
+/*     ROUND.fieldBar = 50
  */}
 
 const getBars = () => {
@@ -142,7 +144,7 @@ const initGame = async () => {
 }
 
 const prepareTerminal = (obj, parent) => {
-    const noVisibleData = ["bar"] /* saltar estas keys */
+    const excludeVisibility = ["bar"] /* saltar estas keys */
 
     const addSection = (key, value) => {
         const section = HELPER.addTag(ITEM.terminal, "li", "terminalSection column")
@@ -159,10 +161,15 @@ const prepareTerminal = (obj, parent) => {
     }
 
     Object.entries(obj).forEach(([key, value]) => {
-        if (!noVisibleData.includes(key)) {
+        console.log(key, typeof value)
+        if (!excludeVisibility.includes(key)) {
             if (typeof value === "object" && !Array.isArray(value) && value) {
                 if (parent === ITEM.terminal) {
                     addSection(key, value)
+                } else {
+                    Object.entries(value).forEach(([item, subValue]) => {
+                        addLine(parent, `${key + " " + item}`, subValue)
+                    })
                 }
             } else {
                 addLine(parent, key, value)
@@ -179,7 +186,7 @@ const activeBars = (FRAME) => {
 }
 
 const moveBar = (direction, FRAME) => {
-    const barHeightPercent = (ROUND.userBar.offsetHeight / FRAME.fieldDim.y) * 100
+    const barHeightPercent = (getBars().user.offsetHeight / FRAME.fieldDim.y) * 100
     const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
     if (direction === "up" && FRAME.userBarPos > 0) FRAME.userBarPos--
     if (direction === "down" && FRAME.userBarPos < CONFIG.barsSteps) FRAME.userBarPos++
@@ -201,10 +208,10 @@ const getFrameInfo = async () => {
 }
 
 const getBarLimits = () => {
-    const userBarTop = ROUND.userBar.offsetTop
-    const userBarHeight = ROUND.userBar.offsetHeight
-    const gameBarTop = ROUND.gameBar.offsetTop
-    const gameBarHeight = ROUND.gameBar.offsetHeight
+    const userBarTop = getBars().user.offsetTop
+    const userBarHeight = getBars().user.offsetHeight
+    const gameBarTop = getBars().game.offsetTop
+    const gameBarHeight = getBars().game.offsetHeight
     return {
         user: {
             start: userBarTop,

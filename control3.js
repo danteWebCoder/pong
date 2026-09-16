@@ -188,12 +188,12 @@ const activeBars = (FRAME) => {
 }
 
 const moveBar = (direction, FRAME) => {
-    const barHeightPercent = (getBars().user.offsetHeight / FRAME.fieldDim.y) * 100
+    const barHeightPercent = (getBars().user.offsetHeight / ROUND.state.fieldDim.y) * 100
     const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
-    if (direction === "up" && FRAME.userBarPos > 0) FRAME.userBarPos--
-    if (direction === "down" && FRAME.userBarPos < CONFIG.barsSteps) FRAME.userBarPos++
-    ROUND.userBar.style.top = `${moveStep * FRAME.userBarPos}%`
-    console.log(direction, `${moveStep * FRAME.userBarPos}%`, FRAME.userBarPos)
+    if (direction === "up" && ROUND.user.barPos > 0) ROUND.user.barPos--
+    if (direction === "down" && ROUND.user.barPos < CONFIG.barsSteps) ROUND.user.barPos++
+    ROUND.user.bar.style.top = `${moveStep * ROUND.user.barPos}%`
+    console.log(direction, `${moveStep * ROUND.user.barPos}%`, ROUND.user.barPos)
 }
 
 const getFrameInfo = async () => {

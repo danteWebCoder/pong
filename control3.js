@@ -27,6 +27,11 @@ const ROUND = {
         selection: null,
         bar: null, /* not visible */
         barPos: null
+    },
+    game: {
+        selection: null,
+        bar: null, /* not visible */
+        barPos: null
     }
 }
 

@@ -195,18 +195,21 @@
                 .terminalInfoBox {
                     width: 220px;
                     height: 100%;
-                    border: 2px solid grey;
-                    border-radius: 12px;
-                    padding: 0 15px;
 
                     .terminalSection {
                         width: 100%;
                         height: auto;
-                        margin-top: 20px;
                         font-family: "Raleway";
                         font-weight: bolder;
                         font-size: 12px;
                         color: var(--whiteMedium);
+                        border: 1px solid grey;
+                        border-radius: 12px;
+                        padding: 15px;
+
+                        &:not(:nth-child(1 of &)) {
+                            margin-top: 20px;
+                        }
 
                         .infoLine {
                             display: flex;

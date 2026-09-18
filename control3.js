@@ -19,20 +19,24 @@ const ITEM = {
 
 const ROUND = {
     state: {
+        field_width: 0,
+        field_height: 0,
         pause: false,
-        cancel: false,
-        fieldDim: { x: null, y: null }
+        cancel: false
     },
     user: {
         selection: null,
         bar: null, /* not visible */
         barPos: CONFIG.barsSteps / 2,
-        barLimits: null
+        barLimit_start: null,
+        barLimit_end: null
     },
     game: {
         selection: null,
         bar: null, /* not visible */
-        barPos: CONFIG.barsSteps / 2
+        barPos: CONFIG.barsSteps / 2,
+        barLimit_start: null,
+        barLimit_end: null
     }
 }
 
@@ -86,15 +90,20 @@ const waitForSelection = async () => {
 }
 
 const configureRound = (selection) => {
-    ROUND.state.fieldDim = getFieldDim()
+    const fieldDimensions = getFieldDim()
+
+    ROUND.state.field_width = fieldDimensions.x
+    ROUND.state.field_height = fieldDimensions.y
     /* user */
     ROUND.user.selection = selection
     ROUND.user.bar = getBars().user
-    ROUND.user.barLimits = getBarLimits().user
+    ROUND.user.barLimit_start = getBarLimits().user.start
+    ROUND.user.barLimit_end = getBarLimits().user.end
     /* game */
     ROUND.game.selection = selection === "left" ? "right" : "left"
     ROUND.game.bar = getBars().game
-    ROUND.game.barLimits = getBarLimits().game
+    ROUND.game.barLimit_start = getBarLimits().game.start
+    ROUND.game.barLimit_end = getBarLimits().game.end
 }
 
 const getBars = () => {
@@ -136,10 +145,10 @@ const initGame = async () => {
 
     /* prepare terminal */
     prepareTerminal(ROUND, ITEM.terminal)
-    /*     getFrameInfo(ROUND, FRAME)
-     */    /* reactive events */
+    /* active bars */
     activeBars(ROUND)
-
+    /* capture frames */
+    getFrameInfo()
     /* stop getFrameInfo at 3s */
     await new Promise(resolve => setTimeout(resolve, 3000))
     ROUND.state.cancel = true
@@ -157,22 +166,15 @@ const prepareTerminal = (obj, parent) => {
     const addLine = (parent, key, value) => {
         const line = HELPER.addTag(parent, "div", "infoLine")
         const keyName = HELPER.addTag(line, "span", "keyName")
-        keyName.textContent = key.toUpperCase()
+        keyName.textContent = key
         const valueData = HELPER.addTag(line, "span", "valueData", key)
-        valueData.textContent = String(value).toUpperCase()
+        valueData.textContent = value
     }
 
     Object.entries(obj).forEach(([key, value]) => {
-        console.log(key, typeof value)
         if (!excludeVisibility.includes(key)) {
             if (typeof value === "object" && !Array.isArray(value) && value) {
-                if (parent === ITEM.terminal) {
-                    addSection(key, value)
-                } else {
-                    Object.entries(value).forEach(([item, subValue]) => {
-                        addLine(parent, `${key + " " + item}`, subValue)
-                    })
-                }
+                parent === ITEM.terminal && addSection(key, value)
             } else {
                 addLine(parent, key, value)
             }
@@ -180,20 +182,20 @@ const prepareTerminal = (obj, parent) => {
     })
 }
 
-const activeBars = (FRAME) => {
-    window.addEventListener("wheel", (e) => {
-        e.deltaY < 0 && moveBar("up", FRAME)
-        e.deltaY > 0 && moveBar("down", FRAME)
-    })
-}
+const activeBars = () => {
+    const moveBar = (direction) => {
+        const barHeightPercent = (getBars().user.offsetHeight / ROUND.state.field_height) * 100
+        const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
+        if (direction === "up" && ROUND.user.barPos > 0) ROUND.user.barPos--
+        if (direction === "down" && ROUND.user.barPos < CONFIG.barsSteps) ROUND.user.barPos++
+        ROUND.user.bar.style.top = `${moveStep * ROUND.user.barPos}%`
+/*     console.log(direction, `${moveStep * ROUND.user.barPos}%`, ROUND.user.barPos)
+ */}
 
-const moveBar = (direction, FRAME) => {
-    const barHeightPercent = (getBars().user.offsetHeight / ROUND.state.fieldDim.y) * 100
-    const moveStep = (100 - barHeightPercent) / CONFIG.barsSteps
-    if (direction === "up" && ROUND.user.barPos > 0) ROUND.user.barPos--
-    if (direction === "down" && ROUND.user.barPos < CONFIG.barsSteps) ROUND.user.barPos++
-    ROUND.user.bar.style.top = `${moveStep * ROUND.user.barPos}%`
-    console.log(direction, `${moveStep * ROUND.user.barPos}%`, ROUND.user.barPos)
+    window.addEventListener("wheel", (e) => {
+        e.deltaY < 0 && moveBar("up")
+        e.deltaY > 0 && moveBar("down")
+    })
 }
 
 const getFrameInfo = async () => {
@@ -202,11 +204,17 @@ const getFrameInfo = async () => {
             await new Promise(resolve => requestAnimationgame.ROUND(resolve))
             if (ROUND.cancel) return
         }
-        ROUND.barsLimits = getBarLimits(ROUND)
-        ROUND.ballPos = getBallPos(ROUND)
-        drawTerminal(ROUND)
+        updateTerminal(ROUND)
         await new Promise(requestAnimationFrame)
     }
+}
+
+const updateTerminal = () => {
+    /* round object */
+    const barsLimits = getBarLimits(ROUND)
+    ROUND.user.barLimits = barsLimits.user
+    /* terminal via round object */
+
 }
 
 const getBarLimits = () => {
@@ -226,7 +234,7 @@ const getBarLimits = () => {
     }
 }
 
-const getBallPos = (FRAME) => {
+/* const getBallPos = (FRAME) => {
     const ballRect = ITEM.ball.getBoundingClientRect()
     const fieldRect = ITEM.field.getBoundingClientRect()
 
@@ -238,7 +246,7 @@ const getBallPos = (FRAME) => {
         y: (yPx / FRAME.fieldDim.y) * 100
     }
 }
-
+ */
 
 const getFieldDim = () => {
     return { 'x': ITEM.field.offsetWidth, 'y': ITEM.field.offsetHeight }

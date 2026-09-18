@@ -199,9 +199,9 @@
                     .terminalSection {
                         width: 100%;
                         height: auto;
-                        font-family: "Raleway";
-                        font-weight: bolder;
-                        font-size: 12px;
+                        font-family: "Anta";
+/*                         font-weight: 500;
+ */                        font-size: 18px;
                         color: var(--whiteMedium);
                         border: 1px solid grey;
                         border-radius: 12px;
@@ -215,6 +215,7 @@
                             display: flex;
                             width: 100%;
                             height: 20px;
+                            font-size: 14px;
 
                             &:nth-child(1 of &) {
                                 margin-top: 15px;
